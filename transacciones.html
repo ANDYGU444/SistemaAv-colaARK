@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transacciones - Sistema Avícola</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a7b5d;
+            --secondary: #d4a574;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a i {
+            margin-right: 5px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        main {
+            padding: 2rem 0;
+            flex: 1;
+        }
+        
+        h1 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .select-with-add {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .select-with-add select {
+            flex: 1;
+        }
+        
+        .btn-add {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button i {
+            margin-right: 5px;
+        }
+        
+        button:hover {
+            background-color: #3a6a4a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .sales-section {
+            border-left: 4px solid var(--secondary);
+            padding-left: 1rem;
+            margin-top: 1.5rem;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        .section-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .section-toggle i {
+            margin-right: 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .section-toggle.collapsed i {
+            transform: rotate(-90deg);
+        }
+        
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            max-height: 500px;
+        }
+        
+        .section-content.collapsed {
+            max-height: 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 1.5rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+            flex-shrink: 0;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        
+        .close:hover {
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .tab-button.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            flex: 1;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-content h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        
+        .options-list {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            max-height: 300px;
+        }
+        
+        .option-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .option-item:last-child {
+            border-bottom: none;
+        }
+        
+        .option-item span {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+        
+        .empty-message {
+            padding: 1rem;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .totals-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .total-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .total-card.income {
+            border-left: 4px solid var(--success);
+        }
+        
+        .total-card.expenses {
+            border-left: 4px solid var(--danger);
+        }
+        
+        .total-card.balance {
+            border-left: 4px solid var(--info);
+        }
+        
+        .total-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .total-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+        
+        .total-income {
+            color: var(--success);
+        }
+        
+        .total-expenses {
+            color: var(--danger);
+        }
+        
+        .total-balance {
+            color: var(--info);
+        }
+        
+        .search-box {
+            margin-bottom: 1rem;
+            display: flex;
+        }
+        
+        .search-box input {
+            flex: 1;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .search-box button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        .text-success {
+            color: var(--success);
+        }
+        
+        .text-danger {
+            color: var(--danger);
+        }
+        
+        .transaction-sale {
+            background-color: #e8f5e8 !important;
+            border-left: 4px solid var(--success);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .select-with-add {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-button {
+                flex: 1;
+                min-width: 33.33%;
+                font-size: 0.8rem;
+                padding: 0.5rem;
+            }
+            
+            .totals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .modal-content {
+                margin: 2% auto;
+                max-height: 96vh;
+            }
+            
+            .options-list {
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-egg"></i>
+                    Sistema Avícola
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="transacciones.html" class="active"><i class="fas fa-money-bill-wave"></i> Transacciones</a></li>
+                        <li><a href="produccion.html"><i class="fas fa-egg"></i> Producción</a></li>
+                        <li><a href="inventario.html"><i class="fas fa-boxes"></i> Inventario</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-money-bill-wave"></i> Registro de Transacciones y Ventas</h1>
+            
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Nueva Transacción</h2>
+                <form id="transaction-form">
+                    <input type="hidden" id="editing-id" value="">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaction-date">Fecha</label>
+                            <input type="date" id="transaction-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-account">Cuenta</label>
+                            <div class="select-with-add">
+                                <select id="transaction-account" required>
+                                    <!-- Las cuentas se cargarán dinámicamente -->
+                                </select>
+                                <button type="button" class="btn-add" id="add-account-btn" title="Agregar nueva cuenta">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaction-type">Tipo</label>
+                            <div class="select-with-add">
+                                <select id="transaction-type" required>
+                                    <!-- Los tipos se cargarán dinámicamente -->
+                                </select>
+                                <button type="button" class="btn-add" id="add-type-btn" title="Agregar nuevo tipo">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-amount">Monto (₡)</label>
+                            <input type="number" id="transaction-amount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-description">Descripción</label>
+                        <textarea id="transaction-description" rows="3"></textarea>
+                    </div>
+                    
+                    <!-- Sección de Detalles de Venta (Opcional) -->
+                    <div class="sales-section">
+                        <button type="button" class="section-toggle" id="sales-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                            <strong>Detalles de Venta (Opcional)</strong>
+                        </button>
+                        
+                        <div class="section-content" id="sales-content">
+                            <div class="form-group">
+                                <label for="customer">Cliente</label>
+                                <div class="select-with-add">
+                                    <select id="customer">
+                                        <!-- Los clientes se cargarán dinámicamente -->
+                                    </select>
+                                    <button type="button" class="btn-add" id="add-customer-btn" title="Agregar nuevo cliente">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cartons">Cantidad de Cartones</label>
+                                    <input type="number" id="cartons" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Precio por Cartón (₡)</label>
+                                    <input type="number" id="price" step="0.01" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="delivery-day">Día de Entrega</label>
+                                <select id="delivery-day">
+                                    <option value="">Seleccione día</option>
+                                    <option value="lunes">Lunes</option>
+                                    <option value="martes">Martes</option>
+                                    <option value="miercoles">Miércoles</option>
+                                    <option value="jueves">Jueves</option>
+                                    <option value="viernes">Viernes</option>
+                                    <option value="sabado">Sábado</option>
+                                    <option value="domingo">Domingo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sale-notes">Notas de Venta</label>
+                                <textarea id="sale-notes" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <button type="submit" id="submit-button"><i class="fas fa-save"></i> Guardar Transacción</button>
+                        <button type="button" id="cancel-edit" class="btn-danger" style="display: none;"><i class="fas fa-times"></i> Cancelar Edición</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card">
+                <div class="form-row">
+                    <h2 style="flex: 1;"><i class="fas fa-list"></i> Historial de Transacciones</h2>
+                    <button class="btn-warning" id="manage-options-btn">
+                        <i class="fas fa-cog"></i> Gestionar Opciones
+                    </button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="transaction-search" placeholder="Buscar transacciones...">
+                    <button type="button" id="clear-search"><i class="fas fa-times"></i></button>
+                </div>
+                <table id="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cuenta</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Descripción</th>
+                            <th>Detalles Venta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-body">
+                        <!-- Las transacciones se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Sección de Totales -->
+            <div class="totals-section">
+                <h2><i class="fas fa-chart-bar"></i> Resumen Financiero</h2>
+                <div class="totals-grid">
+                    <div class="total-card income">
+                        <div class="total-label">Total Ingresos</div>
+                        <div class="total-value total-income" id="total-income">₡0.00</div>
+                    </div>
+                    <div class="total-card expenses">
+                        <div class="total-label">Total Gastos</div>
+                        <div class="total-value total-expenses" id="total-expenses">₡0.00</div>
+                    </div>
+                    <div class="total-card balance">
+                        <div class="total-label">Balance General</div>
+                        <div class="total-value total-balance" id="total-balance">₡0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal para agregar nuevas opciones -->
+    <div id="add-option-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Agregar Nueva Opción</div>
+                <button class="close">&times;</button>
+            </div>
+            <form id="add-option-form">
+                <input type="hidden" id="option-type">
+                <div class="form-group">
+                    <label for="new-option-name">Nombre de la nueva opción:</label>
+                    <input type="text" id="new-option-name" required>
+                </div>
+                <button type="submit"><i class="fas fa-plus"></i> Agregar</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para gestionar opciones -->
+    <div id="manage-options-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Gestionar Opciones</div>
+                <button class="close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="accounts">Cuentas</button>
+                    <button class="tab-button" data-tab="types">Tipos</button>
+                    <button class="tab-button" data-tab="customers">Clientes</button>
+                </div>
+                
+                <div class="tab-content active" id="accounts-tab">
+                    <h3>Cuentas Disponibles</h3>
+                    <div class="options-list" id="accounts-list">
+                        <!-- Las cuentas se cargarán aquí -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="types-tab">
+                    <h3>Tipos Disponibles</h3>
+                    <div class="options-list" id="types-list">
+                        <!-- Los tipos se cargarán aquí -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="customers-tab">
+                    <h3>Clientes Disponibles</h3>
+                    <div class="options-list" id="customers-list">
+                        <!-- Los clientes se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Gestión Avícola.</p>
+            <p>By ARK . Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de ejemplo
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [
+            { 
+                id: 1, 
+                date: '2023-11-25', 
+                account: 'veterinaria', 
+                type: 'gasto', 
+                amount: 15000, 
+                description: 'Gasto veterinario',
+                saleDetails: null
+            },
+            { 
+                id: 2, 
+                date: '2023-11-24', 
+                account: 'ventas', 
+                type: 'ingreso', 
+                amount: 45000, 
+                description: 'Venta de huevos a cliente regular',
+                saleDetails: {
+                    customer: 'Prima',
+                    cartons: 10,
+                    price: 1200,
+                    deliveryDay: 'sabado',
+                    notes: 'Cliente regular'
+                }
+            }
+        ];
+
+        // Opciones dinámicas
+        let options = JSON.parse(localStorage.getItem('transactionOptions')) || {
+            accounts: ['veterinaria', 'alimentacion', 'equipos', 'ventas', 'infraestructura', 'otros'],
+            types: ['ingreso', 'gasto'],
+            customers: ['Prima', 'Randall P', 'Luz H', 'Supermercado Local']
+        };
+
+        // Función para guardar datos en localStorage
+        function saveData() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('transactionOptions', JSON.stringify(options));
+        }
+
+        // Función para formatear moneda
+        function formatCurrency(amount) {
+            return '₡' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        // Función para formatear fecha
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Función para obtener fecha actual
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // Función para mostrar alerta
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.cssText = `
+                padding: 0.75rem 1.25rem;
+                margin-bottom: 1rem;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                background-color: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                border-color: ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            document.querySelector('main .container').insertBefore(alert, document.querySelector('.card'));
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Función para calcular totales
+        function calculateTotals() {
+            const totalIncome = transactions
+                .filter(t => t.type === 'ingreso')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalExpenses = transactions
+                .filter(t => t.type === 'gasto')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalBalance = totalIncome - totalExpenses;
+            
+            // Actualizar los elementos en el DOM
+            document.getElementById('total-income').textContent = formatCurrency(totalIncome);
+            document.getElementById('total-expenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('total-balance').textContent = formatCurrency(totalBalance);
+            
+            return { totalIncome, totalExpenses, totalBalance };
+        }
+
+        // Función para renderizar select options
+        function renderSelectOptions() {
+            // Cuentas
+            const accountSelect = document.getElementById('transaction-account');
+            accountSelect.innerHTML = '<option value="">Seleccione una cuenta</option>';
+            options.accounts.forEach(account => {
+                const option = document.createElement('option');
+                option.value = account;
+                option.textContent = account.charAt(0).toUpperCase() + account.slice(1);
+                accountSelect.appendChild(option);
+            });
+
+            // Tipos
+            const typeSelect = document.getElementById('transaction-type');
+            typeSelect.innerHTML = '<option value="">Seleccione tipo</option>';
+            options.types.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                typeSelect.appendChild(option);
+            });
+
+            // Clientes
+            const customerSelect = document.getElementById('customer');
+            customerSelect.innerHTML = '<option value="">Seleccione un cliente</option>';
+            options.customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer;
+                option.textContent = customer;
+                customerSelect.appendChild(option);
+            });
+        }
+
+        // Función para renderizar opciones en el modal de gestión
+        function renderManageOptions() {
+            // Cuentas
+            const accountsList = document.getElementById('accounts-list');
+            accountsList.innerHTML = '';
+            
+            if (options.accounts.length === 0) {
+                accountsList.innerHTML = '<div class="empty-message">No hay cuentas registradas</div>';
+            } else {
+                options.accounts.forEach((account, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'option-item';
+                    item.innerHTML = `
+                        <span>${account.charAt(0).toUpperCase() + account.slice(1)}</span>
+                        <button class="btn-danger btn-sm" onclick="deleteOption('accounts', ${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    accountsList.appendChild(item);
+                });
+            }
+
+            // Tipos
+            const typesList = document.getElementById('types-list');
+            typesList.innerHTML = '';
+            
+            if (options.types.length === 0) {
+                typesList.innerHTML = '<div class="empty-message">No hay tipos registrados</div>';
+            } else {
+                options.types.forEach((type, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'option-item';
+                    item.innerHTML = `
+                        <span>${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                        <button class="btn-danger btn-sm" onclick="deleteOption('types', ${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    typesList.appendChild(item);
+                });
+            }
+
+            // Clientes
+            const customersList = document.getElementById('customers-list');
+            customersList.innerHTML = '';
+            
+            if (options.customers.length === 0) {
+                customersList.innerHTML = '<div class="empty-message">No hay clientes registrados</div>';
+            } else {
+                options.customers.forEach((customer, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'option-item';
+                    item.innerHTML = `
+                        <span>${customer}</span>
+                        <button class="btn-danger btn-sm" onclick="deleteOption('customers', ${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    customersList.appendChild(item);
+                });
+            }
+        }
+
+        // Función para agregar opción
+        function addOption(type, name) {
+            if (name && !options[type].includes(name.toLowerCase())) {
+                options[type].push(name.toLowerCase());
+                saveData();
+                renderSelectOptions();
+                renderManageOptions();
+                showAlert(`${type.slice(0, -1)} "${name}" agregada exitosamente`);
+                return true;
+            }
+            return false;
+        }
+
+        // Función para eliminar opción
+        function deleteOption(type, index) {
+            if (confirm(`¿Está seguro de que desea eliminar esta opción?`)) {
+                options[type].splice(index, 1);
+                saveData();
+                renderSelectOptions();
+                renderManageOptions();
+                showAlert('Opción eliminada exitosamente');
+            }
+        }
+
+        // Función para agregar transacción
+        function addTransaction(transaction) {
+            transaction.id = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
+            transactions.push(transaction);
+            saveData();
+            renderTransactions();
+            calculateTotals();
+            showAlert('Transacción agregada exitosamente');
+        }
+
+        // Función para actualizar transacción
+        function updateTransaction(id, updatedTransaction) {
+            const index = transactions.findIndex(t => t.id === id);
+            if (index !== -1) {
+                transactions[index] = { ...updatedTransaction, id: id };
+                saveData();
+                renderTransactions();
+                calculateTotals();
+                showAlert('Transacción actualizada exitosamente');
+                return true;
+            }
+            return false;
+        }
+
+        // Función para eliminar transacción
+        function deleteTransaction(id) {
+            if (confirm('¿Está seguro de que desea eliminar esta transacción?')) {
+                transactions = transactions.filter(t => t.id !== id);
+                saveData();
+                renderTransactions();
+                calculateTotals();
+                showAlert('Transacción eliminada exitosamente');
+            }
+        }
+
+        // Función para cargar datos de transacción en el formulario para editar
+        function editTransaction(id) {
+            const transaction = transactions.find(t => t.id === id);
+            if (!transaction) return;
+            
+            // Cargar datos en el formulario
+            document.getElementById('editing-id').value = transaction.id;
+            document.getElementById('transaction-date').value = transaction.date;
+            document.getElementById('transaction-account').value = transaction.account;
+            document.getElementById('transaction-type').value = transaction.type;
+            document.getElementById('transaction-amount').value = transaction.amount;
+            document.getElementById('transaction-description').value = transaction.description;
+            
+            // Cargar detalles de venta si existen
+            if (transaction.saleDetails) {
+                document.getElementById('customer').value = transaction.saleDetails.customer || '';
+                document.getElementById('cartons').value = transaction.saleDetails.cartons || '';
+                document.getElementById('price').value = transaction.saleDetails.price || '';
+                document.getElementById('delivery-day').value = transaction.saleDetails.deliveryDay || '';
+                document.getElementById('sale-notes').value = transaction.saleDetails.notes || '';
+                
+                // Expandir sección de ventas si está colapsada
+                const salesContent = document.getElementById('sales-content');
+                const salesToggle = document.getElementById('sales-toggle');
+                if (salesContent.classList.contains('collapsed')) {
+                    salesContent.classList.remove('collapsed');
+                    salesToggle.classList.remove('collapsed');
+                }
+            } else {
+                // Limpiar detalles de venta
+                clearSalesForm();
+            }
+            
+            // Cambiar texto del botón de envío
+            document.getElementById('submit-button').innerHTML = '<i class="fas fa-save"></i> Actualizar Transacción';
+            
+            // Mostrar botón de cancelar edición
+            document.getElementById('cancel-edit').style.display = 'inline-flex';
+            
+            // Desplazar la vista al formulario
+            document.getElementById('transaction-form').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert('Puede editar los datos de la transacción seleccionada', 'info');
+        }
+
+        // Función para cancelar edición
+        function cancelEdit() {
+            // Limpiar formulario
+            document.getElementById('transaction-form').reset();
+            document.getElementById('transaction-date').value = getCurrentDate();
+            clearSalesForm();
+            
+            // Restaurar botón de envío
+            document.getElementById('submit-button').innerHTML = '<i class="fas fa-save"></i> Guardar Transacción';
+            
+            // Ocultar botón de cancelar edición
+            document.getElementById('cancel-edit').style.display = 'none';
+            
+            // Limpiar ID de edición
+            document.getElementById('editing-id').value = '';
+            
+            // Colapsar sección de ventas
+            const salesContent = document.getElementById('sales-content');
+            const salesToggle = document.getElementById('sales-toggle');
+            salesContent.classList.add('collapsed');
+            salesToggle.classList.add('collapsed');
+            
+            showAlert('Edición cancelada', 'info');
+        }
+
+        // Función para renderizar transacciones
+        function renderTransactions() {
+            const tableBody = document.getElementById('transactions-body');
+            const searchTerm = document.getElementById('transaction-search').value.toLowerCase();
+            
+            // Filtrar transacciones
+            const filteredTransactions = transactions.filter(t => 
+                t.account.toLowerCase().includes(searchTerm) || 
+                t.description.toLowerCase().includes(searchTerm) ||
+                t.type.toLowerCase().includes(searchTerm) ||
+                (t.saleDetails && t.saleDetails.customer && t.saleDetails.customer.toLowerCase().includes(searchTerm))
+            );
+            
+            tableBody.innerHTML = '';
+            
+            filteredTransactions.forEach(transaction => {
+                const hasSaleDetails = transaction.saleDetails && transaction.saleDetails.customer;
+                const rowClass = hasSaleDetails ? 'transaction-sale' : '';
+                
+                const row = document.createElement('tr');
+                row.className = rowClass;
+                
+                // Información de detalles de venta
+                let saleInfo = '';
+                if (hasSaleDetails) {
+                    const sale = transaction.saleDetails;
+                    saleInfo = `
+                        <div><strong>Cliente:</strong> ${sale.customer}</div>
+                        <div><strong>Cartones:</strong> ${sale.cartons || 'N/A'}</div>
+                        <div><strong>Precio:</strong> ${sale.price ? formatCurrency(sale.price) : 'N/A'}</div>
+                        <div><strong>Entrega:</strong> ${sale.deliveryDay ? sale.deliveryDay.charAt(0).toUpperCase() + sale.deliveryDay.slice(1) : 'N/A'}</div>
+                    `;
+                }
+                
+                row.innerHTML = `
+                    <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.account.charAt(0).toUpperCase() + transaction.account.slice(1)}</td>
+                    <td><span class="${transaction.type === 'ingreso' ? 'text-success' : 'text-danger'}">${transaction.type === 'ingreso' ? 'Ingreso' : 'Gasto'}</span></td>
+                    <td>${formatCurrency(transaction.amount)}</td>
+                    <td>${transaction.description}</td>
+                    <td>${saleInfo || 'No aplica'}</td>
+                    <td class="actions">
+                        <button class="btn-info btn-sm" onclick="editTransaction(${transaction.id})">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-danger btn-sm" onclick="deleteTransaction(${transaction.id})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para limpiar formulario de ventas
+        function clearSalesForm() {
+            document.getElementById('customer').value = '';
+            document.getElementById('cartons').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('delivery-day').value = '';
+            document.getElementById('sale-notes').value = '';
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fecha actual
+            document.getElementById('transaction-date').value = getCurrentDate();
+            
+            // Renderizar opciones y transacciones
+            renderSelectOptions();
+            renderManageOptions();
+            renderTransactions();
+            calculateTotals();
+            
+            // Toggle sección de ventas
+            const salesToggle = document.getElementById('sales-toggle');
+            const salesContent = document.getElementById('sales-content');
+            
+            salesToggle.addEventListener('click', function() {
+                salesContent.classList.toggle('collapsed');
+                salesToggle.classList.toggle('collapsed');
+            });
+            
+            // Auto-completar precio cuando se selecciona cuenta de ventas
+            document.getElementById('transaction-account').addEventListener('change', function() {
+                if (this.value === 'ventas') {
+                    document.getElementById('price').value = '1200'; // Precio por defecto
+                    // Expandir sección de ventas si está colapsada
+                    if (salesContent.classList.contains('collapsed')) {
+                        salesContent.classList.remove('collapsed');
+                        salesToggle.classList.remove('collapsed');
+                    }
+                }
+            });
+            
+            // Modales
+            const addOptionModal = document.getElementById('add-option-modal');
+            const manageOptionsModal = document.getElementById('manage-options-modal');
+            const closeButtons = document.querySelectorAll('.close');
+            
+            // Abrir modal para agregar opción
+            document.getElementById('add-account-btn').addEventListener('click', function() {
+                document.getElementById('option-type').value = 'accounts';
+                document.getElementById('modal-title').textContent = 'Agregar Nueva Cuenta';
+                document.getElementById('new-option-name').value = '';
+                addOptionModal.style.display = 'block';
+            });
+            
+            document.getElementById('add-type-btn').addEventListener('click', function() {
+                document.getElementById('option-type').value = 'types';
+                document.getElementById('modal-title').textContent = 'Agregar Nuevo Tipo';
+                document.getElementById('new-option-name').value = '';
+                addOptionModal.style.display = 'block';
+            });
+            
+            document.getElementById('add-customer-btn').addEventListener('click', function() {
+                document.getElementById('option-type').value = 'customers';
+                document.getElementById('modal-title').textContent = 'Agregar Nuevo Cliente';
+                document.getElementById('new-option-name').value = '';
+                addOptionModal.style.display = 'block';
+            });
+            
+            // Abrir modal para gestionar opciones
+            document.getElementById('manage-options-btn').addEventListener('click', function() {
+                renderManageOptions();
+                manageOptionsModal.style.display = 'block';
+            });
+            
+            // Cerrar modales
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    addOptionModal.style.display = 'none';
+                    manageOptionsModal.style.display = 'none';
+                });
+            });
+            
+            // Cerrar modales al hacer clic fuera
+            window.addEventListener('click', function(event) {
+                if (event.target === addOptionModal) {
+                    addOptionModal.style.display = 'none';
+                }
+                if (event.target === manageOptionsModal) {
+                    manageOptionsModal.style.display = 'none';
+                }
+            });
+            
+            // Tabs en modal de gestión
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tab = this.getAttribute('data-tab');
+                    
+                    // Remover clase active de todos los tabs y contenidos
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    // Agregar clase active al tab seleccionado
+                    this.classList.add('active');
+                    document.getElementById(`${tab}-tab`).classList.add('active');
+                });
+            });
+            
+            // Agregar nueva opción
+            document.getElementById('add-option-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const type = document.getElementById('option-type').value;
+                const name = document.getElementById('new-option-name').value.trim();
+                
+                if (addOption(type, name)) {
+                    addOptionModal.style.display = 'none';
+                    this.reset();
+                } else {
+                    showAlert('La opción ya existe o el nombre está vacío', 'danger');
+                }
+            });
+            
+            // Manejar envío del formulario principal
+            document.getElementById('transaction-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Datos básicos de la transacción
+                const transaction = {
+                    date: document.getElementById('transaction-date').value,
+                    account: document.getElementById('transaction-account').value,
+                    type: document.getElementById('transaction-type').value,
+                    amount: parseFloat(document.getElementById('transaction-amount').value),
+                    description: document.getElementById('transaction-description').value,
+                    saleDetails: null
+                };
+                
+                // Procesar detalles de venta si existen
+                const customerName = document.getElementById('customer').value;
+                
+                if (customerName) {
+                    transaction.saleDetails = {
+                        customer: customerName,
+                        cartons: document.getElementById('cartons').value ? parseInt(document.getElementById('cartons').value) : null,
+                        price: document.getElementById('price').value ? parseFloat(document.getElementById('price').value) : null,
+                        deliveryDay: document.getElementById('delivery-day').value || null,
+                        notes: document.getElementById('sale-notes').value || null
+                    };
+                }
+                
+                // Verificar si estamos editando o creando nueva transacción
+                const editingId = document.getElementById('editing-id').value;
+                if (editingId) {
+                    // Actualizar transacción existente
+                    updateTransaction(parseInt(editingId), transaction);
+                    cancelEdit(); // Limpiar formulario después de actualizar
+                } else {
+                    // Crear nueva transacción
+                    addTransaction(transaction);
+                    
+                    // Limpiar formulario
+                    this.reset();
+                    document.getElementById('transaction-date').value = getCurrentDate();
+                    clearSalesForm();
+                    
+                    // Colapsar sección de ventas
+                    salesContent.classList.add('collapsed');
+                    salesToggle.classList.add('collapsed');
+                }
+            });
+            
+            // Cancelar edición
+            document.getElementById('cancel-edit').addEventListener('click', cancelEdit);
+            
+            // Búsqueda
+            document.getElementById('transaction-search').addEventListener('input', renderTransactions);
+            document.getElementById('clear-search').addEventListener('click', function() {
+                document.getElementById('transaction-search').value = '';
+                renderTransactions();
+            });
+        });
+
+        // Hacer funciones globales para los botones de eliminar
+        window.deleteOption = deleteOption;
+        window.editTransaction = editTransaction;
+        window.deleteTransaction = deleteTransaction;
+    </script>
+</body>
+</html>

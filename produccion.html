@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producción - Sistema Avícola</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a7b5d;
+            --secondary: #d4a574;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a i {
+            margin-right: 5px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3a6a4a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-egg"></i>
+                    Sistema Avícola
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="transacciones.html"><i class="fas fa-money-bill-wave"></i> Transacciones</a></li>
+                        <li><a href="produccion.html"><i class="fas fa-egg"></i> Producción</a></li>
+                        <li><a href="inventario.html"><i class="fas fa-boxes"></i> Inventario</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-egg"></i> Registro de Producción de Huevos</h1>
+            
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Registro Diario de Huevos</h2>
+                <form id="production-form">
+                    <div class="form-group">
+                        <label for="production-date">Fecha</label>
+                        <input type="date" id="production-date" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cubicle-1">Cubículo #1</label>
+                            <input type="number" id="cubicle-1" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cubicle-2">Cubículo #2</label>
+                            <input type="number" id="cubicle-2" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cubicle-3">Cubículo #3</label>
+                            <input type="number" id="cubicle-3" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cubicle-4">Cubículo #4</label>
+                            <input type="number" id="cubicle-4" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exterior">Exterior</label>
+                        <input type="number" id="exterior" min="0" required>
+                    </div>
+                    <button type="submit"><i class="fas fa-save"></i> Registrar Producción</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-history"></i> Historial de Producción</h2>
+                <table id="production-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cubículo #1</th>
+                            <th>Cubículo #2</th>
+                            <th>Cubículo #3</th>
+                            <th>Cubículo #4</th>
+                            <th>Exterior</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="production-body">
+                        <!-- Los datos de producción se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Gestión Avícola.</p>
+            <p>By ARK . Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de ejemplo
+        let productionData = JSON.parse(localStorage.getItem('productionData')) || [
+            { id: 1, date: '2023-11-25', cubicle1: 32, cubicle2: 11, cubicle3: 10, cubicle4: 20, exterior: 13, total: 86 }
+        ];
+
+        // Función para guardar datos en localStorage
+        function saveProductionData() {
+            localStorage.setItem('productionData', JSON.stringify(productionData));
+        }
+
+        // Función para formatear fecha
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Función para obtener fecha actual
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // Función para mostrar alerta
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.cssText = `
+                padding: 0.75rem 1.25rem;
+                margin-bottom: 1rem;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                background-color: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                border-color: ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            document.querySelector('main .container').insertBefore(alert, document.querySelector('.card'));
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Función para agregar registro de producción
+        function addProduction(production) {
+            production.id = productionData.length > 0 ? Math.max(...productionData.map(p => p.id)) + 1 : 1;
+            production.total = production.cubicle1 + production.cubicle2 + production.cubicle3 + production.cubicle4 + production.exterior;
+            productionData.push(production);
+            saveProductionData();
+            renderProduction();
+            showAlert('Producción registrada exitosamente');
+        }
+
+        // Función para eliminar registro de producción
+        function deleteProduction(id) {
+            if (confirm('¿Está seguro de que desea eliminar este registro de producción?')) {
+                productionData = productionData.filter(p => p.id !== id);
+                saveProductionData();
+                renderProduction();
+                showAlert('Registro de producción eliminado exitosamente');
+            }
+        }
+
+        // Función para renderizar datos de producción
+        function renderProduction() {
+            const tableBody = document.getElementById('production-body');
+            tableBody.innerHTML = '';
+            
+            productionData.forEach(production => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(production.date)}</td>
+                    <td>${production.cubicle1}</td>
+                    <td>${production.cubicle2}</td>
+                    <td>${production.cubicle3}</td>
+                    <td>${production.cubicle4}</td>
+                    <td>${production.exterior}</td>
+                    <td><strong>${production.total}</strong></td>
+                    <td class="actions">
+                        <button class="btn-danger btn-sm" onclick="deleteProduction(${production.id})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fecha actual
+            document.getElementById('production-date').value = getCurrentDate();
+            
+            // Renderizar datos existentes
+            renderProduction();
+            
+            // Manejar envío del formulario
+            document.getElementById('production-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const production = {
+                    date: document.getElementById('production-date').value,
+                    cubicle1: parseInt(document.getElementById('cubicle-1').value),
+                    cubicle2: parseInt(document.getElementById('cubicle-2').value),
+                    cubicle3: parseInt(document.getElementById('cubicle-3').value),
+                    cubicle4: parseInt(document.getElementById('cubicle-4').value),
+                    exterior: parseInt(document.getElementById('exterior').value)
+                };
+                
+                addProduction(production);
+                this.reset();
+                document.getElementById('production-date').value = getCurrentDate();
+            });
+        });
+    </script>
+</body>
+</html>

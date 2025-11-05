@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Sistema Avícola</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a7b5d;
+            --secondary: #d4a574;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a i {
+            margin-right: 5px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .inventory-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .inventory-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .inventory-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .inventory-status {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .status-good {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3a6a4a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .operation-type {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .operation-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            border: 2px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .operation-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(74, 123, 93, 0.1);
+        }
+        
+        .operation-option.add.selected {
+            border-color: var(--success);
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        
+        .operation-option.subtract.selected {
+            border-color: var(--danger);
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        
+        .operation-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .add .operation-icon {
+            color: var(--success);
+        }
+        
+        .subtract .operation-icon {
+            color: var(--danger);
+        }
+        
+        .quantity-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-display .btn-sm {
+            padding: 0.25rem 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .inventory-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .operation-type {
+                flex-direction: column;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-egg"></i>
+                    Sistema Avícola
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="transacciones.html"><i class="fas fa-money-bill-wave"></i> Transacciones</a></li>
+                        <li><a href="produccion.html"><i class="fas fa-egg"></i> Producción</a></li>
+                        <li><a href="inventario.html"><i class="fas fa-boxes"></i> Inventario</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-boxes"></i> Gestión de Inventario</h1>
+            
+            <div class="inventory-grid" id="inventory-grid">
+                <!-- Los elementos del inventario se cargarán aquí -->
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Actualizar Inventario</h2>
+                
+                <div class="operation-type">
+                    <div class="operation-option add selected" data-operation="add">
+                        <div class="operation-icon"><i class="fas fa-plus"></i></div>
+                        <div>Agregar al Inventario</div>
+                    </div>
+                    <div class="operation-option subtract" data-operation="subtract">
+                        <div class="operation-icon"><i class="fas fa-minus"></i></div>
+                        <div>Restar del Inventario</div>
+                    </div>
+                </div>
+                
+                <form id="inventory-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inventory-item">Artículo</label>
+                            <select id="inventory-item" required>
+                                <option value="">Seleccione artículo</option>
+                                <option value="alimento">Alimento para Gallinas</option>
+                                <option value="cartones">Cartones para Huevos</option>
+                                <option value="medicamentos">Medicamentos</option>
+                                <option value="limpieza">Material de Limpieza</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-quantity">Cantidad</label>
+                            <input type="number" id="inventory-quantity" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inventory-unit">Unidad de Medida</label>
+                        <select id="inventory-unit" required>
+                            <option value="kg">Kilogramos (kg)</option>
+                            <option value="unidades">Unidades</option>
+                            <option value="litros">Litros (L)</option>
+                            <option value="cajas">Cajas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inventory-notes">Notas</label>
+                        <textarea id="inventory-notes" rows="3" placeholder="Proveedor, fecha de vencimiento, etc."></textarea>
+                    </div>
+                    <button type="submit"><i class="fas fa-save"></i> Actualizar Inventario</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-history"></i> Historial de Inventario</h2>
+                <table id="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Artículo</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Unidad</th>
+                            <th>Notas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body">
+                        <!-- El historial se cargará aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Gestión Avícola.</p>
+            <p>By ARK . Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de ejemplo
+        let inventoryData = JSON.parse(localStorage.getItem('inventoryData')) || [
+            { 
+                alimento: { cantidad: 850, unidad: 'kg', estado: 'good' },
+                cartones: { cantidad: 120, unidad: 'unidades', estado: 'warning' },
+                medicamentos: { cantidad: 15, unidad: 'unidades', estado: 'good' },
+                limpieza: { cantidad: 8, unidad: 'unidades', estado: 'danger' }
+            }
+        ];
+
+        let inventoryHistory = JSON.parse(localStorage.getItem('inventoryHistory')) || [
+            { id: 1, date: '2023-11-25', item: 'Alimento para Gallinas', type: 'add', quantity: 50, unit: 'kg', notes: 'Compra a Proveedor X' }
+        ];
+
+        // Variable para controlar el tipo de operación actual
+        let currentOperation = 'add';
+
+        // Función para guardar datos en localStorage
+        function saveInventoryData() {
+            localStorage.setItem('inventoryData', JSON.stringify(inventoryData));
+            localStorage.setItem('inventoryHistory', JSON.stringify(inventoryHistory));
+        }
+
+        // Función para formatear fecha
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Función para obtener fecha actual
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // Función para mostrar alerta
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.cssText = `
+                padding: 0.75rem 1.25rem;
+                margin-bottom: 1rem;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                background-color: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                border-color: ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            document.querySelector('main .container').insertBefore(alert, document.querySelector('.card'));
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Función para renderizar inventario
+        function renderInventory() {
+            const inventoryGrid = document.getElementById('inventory-grid');
+            inventoryGrid.innerHTML = '';
+            
+            const itemNames = {
+                'alimento': 'Alimento para Gallinas',
+                'cartones': 'Cartones para Huevos',
+                'medicamentos': 'Medicamentos',
+                'limpieza': 'Material de Limpieza'
+            };
+            
+            const currentInventory = inventoryData[inventoryData.length - 1];
+            
+            Object.keys(currentInventory).forEach(key => {
+                const item = currentInventory[key];
+                const statusClass = `status-${item.estado}`;
+                const statusText = item.estado === 'good' ? 'Stock suficiente' : 
+                                 item.estado === 'warning' ? 'Stock medio' : 'Stock bajo';
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'inventory-item';
+                itemElement.innerHTML = `
+                    <div class="inventory-name">${itemNames[key]}</div>
+                    <div class="inventory-value">${item.cantidad} ${item.unidad}</div>
+                    <div class="inventory-status ${statusClass}">${statusText}</div>
+                `;
+                inventoryGrid.appendChild(itemElement);
+            });
+        }
+
+        // Función para actualizar inventario
+        function updateInventory(itemData) {
+            const currentInventory = {...inventoryData[inventoryData.length - 1]};
+            const itemKey = document.getElementById('inventory-item').value;
+            
+            if (currentInventory[itemKey]) {
+                // Determinar si estamos agregando o restando
+                if (currentOperation === 'add') {
+                    currentInventory[itemKey].cantidad += parseFloat(itemData.quantity);
+                } else {
+                    // Verificar que no quede cantidad negativa
+                    if (currentInventory[itemKey].cantidad < parseFloat(itemData.quantity)) {
+                        showAlert('No hay suficiente stock para realizar esta operación', 'danger');
+                        return false;
+                    }
+                    currentInventory[itemKey].cantidad -= parseFloat(itemData.quantity);
+                }
+                
+                // Actualizar estado basado en la cantidad
+                if (currentInventory[itemKey].cantidad > 100) {
+                    currentInventory[itemKey].estado = 'good';
+                } else if (currentInventory[itemKey].cantidad > 20) {
+                    currentInventory[itemKey].estado = 'warning';
+                } else {
+                    currentInventory[itemKey].estado = 'danger';
+                }
+            }
+            
+            inventoryData.push(currentInventory);
+            inventoryHistory.push(itemData);
+            saveInventoryData();
+            renderInventory();
+            renderInventoryHistory();
+            showAlert(`Inventario ${currentOperation === 'add' ? 'actualizado' : 'reducido'} exitosamente`);
+            return true;
+        }
+
+        // Función para renderizar historial de inventario
+        function renderInventoryHistory() {
+            const tableBody = document.getElementById('inventory-body');
+            tableBody.innerHTML = '';
+            
+            inventoryHistory.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(item.date)}</td>
+                    <td>${item.item}</td>
+                    <td>
+                        <span class="inventory-status ${item.type === 'add' ? 'status-good' : 'status-danger'}">
+                            ${item.type === 'add' ? 'Entrada' : 'Salida'}
+                        </span>
+                    </td>
+                    <td>${item.quantity}</td>
+                    <td>${item.unit}</td>
+                    <td>${item.notes}</td>
+                    <td class="actions">
+                        <button class="btn-info btn-sm" onclick="editInventoryItem(${item.id})">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-danger btn-sm" onclick="deleteInventoryItem(${item.id})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para eliminar item del historial
+        function deleteInventoryItem(id) {
+            if (confirm('¿Está seguro de que desea eliminar este registro de inventario?')) {
+                inventoryHistory = inventoryHistory.filter(i => i.id !== id);
+                saveInventoryData();
+                renderInventoryHistory();
+                showAlert('Registro de inventario eliminado exitosamente');
+            }
+        }
+
+        // Función para editar item del historial
+        function editInventoryItem(id) {
+            const item = inventoryHistory.find(i => i.id === id);
+            if (!item) return;
+            
+            // Prellenar el formulario con los datos del item
+            const itemKeys = {
+                'Alimento para Gallinas': 'alimento',
+                'Cartones para Huevos': 'cartones',
+                'Medicamentos': 'medicamentos',
+                'Material de Limpieza': 'limpieza',
+                'Otros': 'otros'
+            };
+            
+            document.getElementById('inventory-item').value = itemKeys[item.item] || 'otros';
+            document.getElementById('inventory-quantity').value = item.quantity;
+            document.getElementById('inventory-unit').value = item.unit;
+            document.getElementById('inventory-notes').value = item.notes;
+            
+            // Establecer el tipo de operación
+            currentOperation = item.type;
+            updateOperationUI();
+            
+            // Eliminar el item del historial para evitar duplicados
+            deleteInventoryItem(id);
+            
+            // Desplazar la vista al formulario
+            document.getElementById('inventory-form').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert('Puede editar los datos del registro seleccionado', 'info');
+        }
+
+        // Función para actualizar la UI del tipo de operación
+        function updateOperationUI() {
+            document.querySelectorAll('.operation-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            document.querySelector(`.operation-option[data-operation="${currentOperation}"]`).classList.add('selected');
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Renderizar inventario e historial
+            renderInventory();
+            renderInventoryHistory();
+            
+            // Manejar selección de tipo de operación
+            document.querySelectorAll('.operation-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    currentOperation = this.getAttribute('data-operation');
+                    updateOperationUI();
+                });
+            });
+            
+            // Manejar envío del formulario
+            document.getElementById('inventory-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const itemNames = {
+                    'alimento': 'Alimento para Gallinas',
+                    'cartones': 'Cartones para Huevos',
+                    'medicamentos': 'Medicamentos',
+                    'limpieza': 'Material de Limpieza',
+                    'otros': 'Otros'
+                };
+                
+                const itemData = {
+                    id: inventoryHistory.length > 0 ? Math.max(...inventoryHistory.map(i => i.id)) + 1 : 1,
+                    date: getCurrentDate(),
+                    item: itemNames[document.getElementById('inventory-item').value],
+                    type: currentOperation,
+                    quantity: parseFloat(document.getElementById('inventory-quantity').value),
+                    unit: document.getElementById('inventory-unit').value,
+                    notes: document.getElementById('inventory-notes').value
+                };
+                
+                if (updateInventory(itemData)) {
+                    this.reset();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
