@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compradores Semanales - Sistema Avícola</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a7b5d;
+            --secondary: #d4a574;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a i {
+            margin-right: 5px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        main {
+            padding: 2rem 0;
+            flex: 1;
+        }
+        
+        h1 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button i {
+            margin-right: 5px;
+        }
+        
+        button:hover {
+            background-color: #3a6a4a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .totals-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .total-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .total-card.required {
+            border-left: 4px solid var(--info);
+        }
+        
+        .total-card.collected {
+            border-left: 4px solid var(--success);
+        }
+        
+        .total-card.pending {
+            border-left: 4px solid var(--warning);
+        }
+        
+        .total-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .total-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+        
+        .total-required {
+            color: var(--info);
+        }
+        
+        .total-collected {
+            color: var(--success);
+        }
+        
+        .total-pending {
+            color: var(--warning);
+        }
+        
+        .carton-input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .day-column {
+            width: 120px;
+        }
+        
+        .client-column {
+            width: 150px;
+        }
+        
+        .number-column {
+            width: 50px;
+        }
+        
+        .carton-column {
+            width: 100px;
+        }
+        
+        .actions-column {
+            width: 150px;
+        }
+        
+        .summary-table {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+        
+        .summary-table th, .summary-table td {
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .summary-table th {
+            background-color: var(--secondary);
+        }
+        
+        .week-summary {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #dee2e6;
+        }
+        
+        .editable-average {
+            background-color: #fff3cd !important;
+            border: 2px solid var(--warning) !important;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .totals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .carton-input {
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-egg"></i>
+                    Sistema Avícola
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="transacciones.html"><i class="fas fa-money-bill-wave"></i> Transacciones</a></li>
+                        <li><a href="produccion.html"><i class="fas fa-egg"></i> Producción</a></li>
+                        <li><a href="inventario.html"><i class="fas fa-boxes"></i> Inventario</a></li>
+                        <li><a href="compradores.html" class="active"><i class="fas fa-users"></i> Compradores</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-users"></i> Gestión de Compradores Semanales</h1>
+            
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Agregar Nuevo Cliente</h2>
+                <form id="client-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-name">Nombre del Cliente</label>
+                            <input type="text" id="client-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-cartons">Cartones Requeridos</label>
+                            <input type="number" id="client-cartons" min="1" required>
+                        </div>
+                    </div>
+                    <button type="submit"><i class="fas fa-plus"></i> Agregar Cliente</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-list"></i> Compradores Semanales</h2>
+                <div class="table-container">
+                    <table id="buyers-table">
+                        <thead>
+                            <tr>
+                                <th class="number-column">N.º</th>
+                                <th class="client-column">Cliente</th>
+                                <th class="day-column">Día #1</th>
+                                <th class="carton-column">Cd Cartones</th>
+                                <th class="day-column">Día #2</th>
+                                <th class="carton-column">Cd Cartones</th>
+                                <th class="day-column">Día #3</th>
+                                <th class="carton-column">Cd Cartones</th>
+                                <th class="day-column">Día #4</th>
+                                <th class="carton-column">Cd Cartones</th>
+                                <th class="actions-column">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buyers-body">
+                            <!-- Los compradores se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="week-summary">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="total-cartons">Total Cartones Requeridos</label>
+                            <input type="number" id="total-cartons" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="average-cartons">Cantidad de Cartones Semanales Promedio</label>
+                            <input type="number" id="average-cartons" class="editable-average" min="0">
+                        </div>
+                    </div>
+                    
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miércoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sábado</th>
+                                <th>Domingo</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="number" class="carton-input day-carton" id="monday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="tuesday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="wednesday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="thursday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="friday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="saturday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input day-carton" id="sunday-cartons" value="7" min="0"></td>
+                                <td><input type="number" class="carton-input" id="weekly-total" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección de Totales -->
+            <div class="totals-section">
+                <h2><i class="fas fa-chart-bar"></i> Resumen Semanal</h2>
+                <div class="totals-grid">
+                    <div class="total-card required">
+                        <div class="total-label">Cartones Requeridos</div>
+                        <div class="total-value total-required" id="total-required">0</div>
+                    </div>
+                    <div class="total-card collected">
+                        <div class="total-label">Cartones Recogidos</div>
+                        <div class="total-value total-collected" id="total-collected">0</div>
+                    </div>
+                    <div class="total-card pending">
+                        <div class="total-label">Cartones Pendientes</div>
+                        <div class="total-value total-pending" id="total-pending">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Gestión Avícola.</p>
+            <p>By ARK . Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de ejemplo
+        let buyers = JSON.parse(localStorage.getItem('buyers')) || [
+            { 
+                id: 1, 
+                name: 'Prima', 
+                requiredCartons: 10,
+                days: [
+                    { day: 'Miercoles', cartons: 10 },
+                    { day: 'Sabado', cartons: 10 },
+                    { day: 'Domingo', cartons: 10 }
+                ]
+            },
+            { 
+                id: 2, 
+                name: 'Randall P', 
+                requiredCartons: 20,
+                days: [
+                    { day: 'Sabado', cartons: 20 }
+                ]
+            },
+            { 
+                id: 3, 
+                name: 'Luz H', 
+                requiredCartons: 10,
+                days: [
+                    { day: 'Martes', cartons: 10 }
+                ]
+            },
+            { 
+                id: 4, 
+                name: 'Cinthya', 
+                requiredCartons: 1,
+                days: [
+                    { day: 'Sabado', cartons: 1 }
+                ]
+            },
+            { 
+                id: 5, 
+                name: 'Cathy Q', 
+                requiredCartons: 1,
+                days: [
+                    { day: 'Lunes', cartons: 1 }
+                ]
+            },
+            { 
+                id: 6, 
+                name: 'Eli', 
+                requiredCartons: 1,
+                days: [
+                    { day: 'Martes', cartons: 1 }
+                ]
+            },
+            { 
+                id: 7, 
+                name: 'Franklin', 
+                requiredCartons: 1,
+                days: [
+                    { day: 'Viernes', cartons: 1 }
+                ]
+            },
+            { 
+                id: 8, 
+                name: 'Elido', 
+                requiredCartons: 1,
+                days: [
+                    { day: 'Lunes', cartons: 1 }
+                ]
+            },
+            { 
+                id: 9, 
+                name: 'Cliente William', 
+                requiredCartons: 5,
+                days: [
+                    { day: 'Lunes', cartons: 5 }
+                ]
+            }
+        ];
+
+        // Variable para almacenar el promedio semanal
+        let weeklyAverage = 7;
+
+        // Función para guardar datos en localStorage
+        function saveData() {
+            localStorage.setItem('buyers', JSON.stringify(buyers));
+            localStorage.setItem('weeklyAverage', weeklyAverage.toString());
+        }
+
+        // Función para mostrar alerta
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.cssText = `
+                padding: 0.75rem 1.25rem;
+                margin-bottom: 1rem;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                background-color: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                border-color: ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            document.querySelector('main .container').insertBefore(alert, document.querySelector('.card'));
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Función para actualizar todos los días con el promedio
+        function updateAllDaysWithAverage() {
+            const dayInputs = document.querySelectorAll('.day-carton');
+            dayInputs.forEach(input => {
+                input.value = weeklyAverage;
+            });
+            updateWeeklyTotal();
+        }
+
+        // Función para actualizar el total semanal
+        function updateWeeklyTotal() {
+            const dayInputs = [
+                'monday-cartons', 'tuesday-cartons', 'wednesday-cartons',
+                'thursday-cartons', 'friday-cartons', 'saturday-cartons', 'sunday-cartons'
+            ];
+            
+            const total = dayInputs.reduce((sum, inputId) => {
+                return sum + parseInt(document.getElementById(inputId).value || 0);
+            }, 0);
+            document.getElementById('weekly-total').value = total;
+            
+            // Actualizar Cartones Recogidos en el resumen semanal
+            document.getElementById('total-collected').textContent = total;
+            
+            // Recalcular Cartones Pendientes
+            const totalRequired = parseInt(document.getElementById('total-required').textContent) || 0;
+            const totalPending = totalRequired - total;
+            document.getElementById('total-pending').textContent = totalPending > 0 ? totalPending : 0;
+        }
+
+        // Función para calcular totales
+        function calculateTotals() {
+            // Total de cartones requeridos
+            const totalRequired = buyers.reduce((sum, buyer) => sum + buyer.requiredCartons, 0);
+            
+            // Actualizar los elementos en el DOM
+            document.getElementById('total-required').textContent = totalRequired;
+            
+            // Actualizar total de cartones requeridos
+            document.getElementById('total-cartons').value = totalRequired;
+            
+            // Actualizar promedio semanal si no se ha modificado manualmente
+            if (document.getElementById('average-cartons').value === '7') {
+                const calculatedAverage = Math.ceil(totalRequired / 7);
+                weeklyAverage = calculatedAverage;
+                document.getElementById('average-cartons').value = calculatedAverage;
+                updateAllDaysWithAverage();
+            } else {
+                // Si ya se modificó manualmente, mantener el valor y actualizar los días
+                updateAllDaysWithAverage();
+            }
+            
+            saveData();
+            return { totalRequired };
+        }
+
+        // Función para agregar comprador
+        function addBuyer(buyer) {
+            buyer.id = buyers.length > 0 ? Math.max(...buyers.map(b => b.id)) + 1 : 1;
+            buyer.days = [];
+            buyers.push(buyer);
+            saveData();
+            renderBuyers();
+            calculateTotals();
+            showAlert('Cliente agregado exitosamente');
+        }
+
+        // Función para eliminar comprador
+        function deleteBuyer(id) {
+            if (confirm('¿Está seguro de que desea eliminar este cliente?')) {
+                buyers = buyers.filter(b => b.id !== id);
+                saveData();
+                renderBuyers();
+                calculateTotals();
+                showAlert('Cliente eliminado exitosamente');
+            }
+        }
+
+        // Función para actualizar día de entrega
+        function updateDeliveryDay(buyerId, dayIndex, day, cartons) {
+            const buyer = buyers.find(b => b.id === buyerId);
+            if (!buyer) return;
+            
+            // Si el día ya existe, actualizarlo
+            if (buyer.days[dayIndex]) {
+                buyer.days[dayIndex].day = day;
+                buyer.days[dayIndex].cartons = parseInt(cartons) || 0;
+            } else {
+                // Si no existe, agregarlo
+                buyer.days[dayIndex] = { day, cartons: parseInt(cartons) || 0 };
+            }
+            
+            saveData();
+            // No actualizamos calculateTotals() aquí para no interferir con el promedio semanal
+        }
+
+        // Función para renderizar compradores
+        function renderBuyers() {
+            const tableBody = document.getElementById('buyers-body');
+            tableBody.innerHTML = '';
+            
+            buyers.forEach((buyer, index) => {
+                const row = document.createElement('tr');
+                
+                // Crear celdas para cada día (hasta 4 días)
+                let daysHtml = '';
+                for (let i = 0; i < 4; i++) {
+                    const dayData = buyer.days[i] || { day: '', cartons: '' };
+                    daysHtml += `
+                        <td>
+                            <select onchange="updateDeliveryDay(${buyer.id}, ${i}, this.value, document.getElementById('cartons-${buyer.id}-${i}').value)">
+                                <option value="">Seleccione</option>
+                                <option value="Lunes" ${dayData.day === 'Lunes' ? 'selected' : ''}>Lunes</option>
+                                <option value="Martes" ${dayData.day === 'Martes' ? 'selected' : ''}>Martes</option>
+                                <option value="Miercoles" ${dayData.day === 'Miercoles' ? 'selected' : ''}>Miércoles</option>
+                                <option value="Jueves" ${dayData.day === 'Jueves' ? 'selected' : ''}>Jueves</option>
+                                <option value="Viernes" ${dayData.day === 'Viernes' ? 'selected' : ''}>Viernes</option>
+                                <option value="Sabado" ${dayData.day === 'Sabado' ? 'selected' : ''}>Sábado</option>
+                                <option value="Domingo" ${dayData.day === 'Domingo' ? 'selected' : ''}>Domingo</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" id="cartons-${buyer.id}-${i}" class="carton-input" 
+                                   value="${dayData.cartons || ''}" min="0" max="${buyer.requiredCartons}"
+                                   onchange="updateDeliveryDay(${buyer.id}, ${i}, document.querySelector('#buyers-body select:nth-child(${i*2+3})').value, this.value)">
+                        </td>
+                    `;
+                }
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${buyer.name}</td>
+                    ${daysHtml}
+                    <td class="actions">
+                        <button class="btn-danger btn-sm" onclick="deleteBuyer(${buyer.id})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Agregar filas vacías si es necesario
+            const emptyRows = 3 - (buyers.length % 3);
+            for (let i = 0; i < emptyRows; i++) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td>${buyers.length + i + 1}</td>
+                    <td></td>
+                    <td></td><td></td>
+                    <td></td><td></td>
+                    <td></td><td></td>
+                    <td></td><td></td>
+                    <td></td>
+                `;
+                tableBody.appendChild(emptyRow);
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar promedio semanal guardado
+            const savedAverage = localStorage.getItem('weeklyAverage');
+            if (savedAverage) {
+                weeklyAverage = parseInt(savedAverage);
+                document.getElementById('average-cartons').value = weeklyAverage;
+                updateAllDaysWithAverage();
+            }
+            
+            // Renderizar compradores y calcular totales
+            renderBuyers();
+            calculateTotals();
+            
+            // Manejar envío del formulario
+            document.getElementById('client-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const buyer = {
+                    name: document.getElementById('client-name').value,
+                    requiredCartons: parseInt(document.getElementById('client-cartons').value)
+                };
+                
+                addBuyer(buyer);
+                
+                // Limpiar formulario
+                this.reset();
+            });
+            
+            // Actualizar todos los días cuando cambia el promedio semanal
+            document.getElementById('average-cartons').addEventListener('input', function() {
+                weeklyAverage = parseInt(this.value) || 0;
+                updateAllDaysWithAverage();
+                saveData();
+            });
+            
+            // Actualizar total semanal cuando cambian los valores de los días individuales
+            const dayInputs = document.querySelectorAll('.day-carton');
+            dayInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    updateWeeklyTotal();
+                    // Recalcular el promedio basado en los cambios manuales
+                    const days = document.querySelectorAll('.day-carton');
+                    let sum = 0;
+                    days.forEach(day => {
+                        sum += parseInt(day.value) || 0;
+                    });
+                    const newAverage = Math.round(sum / 7);
+                    weeklyAverage = newAverage;
+                    document.getElementById('average-cartons').value = newAverage;
+                    saveData();
+                });
+            });
+        });
+
+        // Hacer funciones globales para los eventos
+        window.deleteBuyer = deleteBuyer;
+        window.updateDeliveryDay = updateDeliveryDay;
+    </script>
+</body>
+</html>
