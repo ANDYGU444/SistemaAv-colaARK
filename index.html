@@ -859,7 +859,6 @@
         <i class="fas fa-check-circle"></i> App Instalada
     </div>
 
-
     <script>
         // =============================================
         // SISTEMA PRINCIPAL - FUNCIONES BÁSICAS
@@ -927,13 +926,23 @@
             const overlay = document.getElementById('installOverlay');
             
             if (modal && overlay && !isAppInstalled) {
+                console.log('🔄 Mostrando modal de instalación...');
                 modal.style.display = 'block';
                 overlay.style.display = 'block';
                 
                 // Auto-cerrar después de 30 segundos
                 setTimeout(() => {
-                    closeInstallModal();
+                    if (modal.style.display === 'block') {
+                        console.log('⏰ Auto-cerrando modal después de 30 segundos');
+                        closeInstallModal();
+                    }
                 }, 30000);
+            } else {
+                console.log('❌ No se puede mostrar modal:', {
+                    modal: !!modal,
+                    overlay: !!overlay,
+                    installed: isAppInstalled
+                });
             }
         }
 
@@ -945,15 +954,14 @@
             if (modal && overlay) {
                 modal.style.display = 'none';
                 overlay.style.display = 'none';
+                console.log('✅ Modal cerrado');
             }
-            
-            // Guardar preferencia para no mostrar nuevamente por hoy
-            localStorage.setItem('installPromptShown', new Date().toDateString());
         }
 
         // Instalar la PWA
         async function installPWA() {
             if (!deferredPrompt) {
+                console.log('❌ No hay prompt disponible, mostrando instrucciones manuales');
                 showManualInstructions();
                 closeInstallModal();
                 return;
@@ -967,12 +975,15 @@
                 
                 // Esperar a que el usuario responda
                 const { outcome } = await deferredPrompt.userChoice;
-                console.log(`Usuario ${outcome} la instalación`);
+                console.log(`✅ Usuario ${outcome} la instalación`);
                 
                 if (outcome === 'accepted') {
                     console.log('🎉 Usuario aceptó la instalación');
                     isAppInstalled = true;
                     showInstalledBadge();
+                } else {
+                    console.log('❌ Usuario rechazó la instalación');
+                    // El modal seguirá apareciendo en futuras visitas
                 }
                 
                 // Limpiar la referencia
@@ -993,24 +1004,24 @@
             
             if (state.isIOS) {
                 instructions = `
-                    Para instalar en iPhone/iPad:
-                    1. Toca el botón COMPARTIR 📤 (barra inferior)
-                    2. Desplaza hacia abajo
-                    3. Selecciona "AGREGAR A PANTALLA DE INICIO"
-                    4. Toca "AGREGAR" en la esquina superior derecha
+    Para instalar en iPhone/iPad:
+    1. Toca el botón COMPARTIR 📤 (barra inferior)
+    2. Desplaza hacia abajo
+    3. Selecciona "AGREGAR A PANTALLA DE INICIO"
+    4. Toca "AGREGAR" en la esquina superior derecha
                 `;
             } else if (state.isAndroid) {
                 instructions = `
-                    Para instalar en Android:
-                    1. Toca el menú (⋮) en Chrome
-                    2. Selecciona "AGREGAR A LA PANTALLA DE INICIO" 
-                    3. Confirma tocando "AGREGAR"
+    Para instalar en Android:
+    1. Toca el menú (⋮) en Chrome
+    2. Selecciona "AGREGAR A LA PANTALLA DE INICIO" 
+    3. Confirma tocando "AGREGAR"
                 `;
             } else {
                 instructions = `
-                    Para instalar en Computadora:
-                    1. Haz clic en "INSTALAR" en la barra de direcciones
-                    2. O ve a Configuración → Más herramientas → Crear acceso directo
+    Para instalar en Computadora:
+    1. Haz clic en "INSTALAR" en la barra de direcciones
+    2. O ve a Configuración → Más herramientas → Crear acceso directo
                 `;
             }
             
@@ -1031,11 +1042,21 @@
         // Verificar si ya está instalada
         function checkIfInstalled() {
             if (window.matchMedia('(display-mode: standalone)').matches) {
-                console.log('✅ App ya está instalada');
+                console.log('✅ App ya está instalada (modo standalone)');
                 isAppInstalled = true;
                 showInstalledBadge();
                 return true;
             }
+            
+            // Verificar otros métodos
+            if (window.navigator.standalone) {
+                console.log('✅ App ya está instalada (navigator.standalone)');
+                isAppInstalled = true;
+                showInstalledBadge();
+                return true;
+            }
+            
+            console.log('❌ App no está instalada');
             return false;
         }
 
@@ -1049,11 +1070,13 @@
                     .catch(function(error) {
                         console.log('❌ Error ServiceWorker:', error);
                     });
+            } else {
+                console.log('❌ Service Worker no soportado');
             }
         }
 
         // =============================================
-        // INICIALIZACIÓN PRINCIPAL
+        // INICIALIZACIÓN PRINCIPAL - CORREGIDA
         // =============================================
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -1070,25 +1093,24 @@
             
             // 4. Configurar eventos de instalación PWA
             window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('🎯 beforeinstallprompt event fired!');
+                console.log('🎯 ¡beforeinstallprompt event fired!');
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // Verificar si ya mostramos el prompt hoy
-                const lastShown = localStorage.getItem('installPromptShown');
-                const today = new Date().toDateString();
-                
-                if (!isAppInstalled && lastShown !== today) {
-                    // Mostrar modal después de 5 segundos
+                // MOSTRAR MODAL SIEMPRE (eliminada la verificación de fecha)
+                if (!isAppInstalled) {
+                    console.log('📱 Mostrando modal en 3 segundos...');
                     setTimeout(() => {
                         showInstallModal();
-                    }, 5000);
+                    }, 3000);
+                } else {
+                    console.log('✅ App ya instalada, no mostrar modal');
                 }
             });
 
             // Cuando la app se instala
             window.addEventListener('appinstalled', (evt) => {
-                console.log('🎉 App instalada correctamente!');
+                console.log('🎉 ¡App instalada correctamente!');
                 isAppInstalled = true;
                 showInstalledBadge();
                 closeInstallModal();
@@ -1106,6 +1128,19 @@
                 }, 1000);
             }
 
+            // 6. Verificar si hay deferredPrompt ya disponible (por si el evento se disparó antes)
+            setTimeout(() => {
+                if (deferredPrompt && !isAppInstalled) {
+                    console.log('🔄 DeferredPrompt disponible, mostrando modal...');
+                    showInstallModal();
+                } else if (!deferredPrompt && !isAppInstalled) {
+                    console.log('ℹ️  No hay deferredPrompt disponible. Razones posibles:');
+                    console.log('   - No es la primera visita');
+                    console.log('   - Navegador no soporta PWA');
+                    console.log('   - Ya se mostró el prompt antes');
+                }
+            }, 2000);
+
             // Actualizar estadísticas periódicamente
             setInterval(cargarEstadisticasRapidas, 30000);
             
@@ -1113,39 +1148,77 @@
         });
 
         // =============================================
-        // FUNCIONES GLOBALES PARA DEBUG
+        // FUNCIONES GLOBALES PARA DEBUG Y TESTING
         // =============================================
         
         // Forzar mostrar el modal (para testing)
         window.forceShowInstallModal = function() {
+            console.log('🔧 Forzando mostrar modal...');
             showInstallModal();
         };
 
         // Mostrar estado PWA
         window.showPWAStatus = function() {
             const state = checkPWARequirements();
-            alert(`Estado PWA:
+            const status = `Estado PWA:
     ✅ Service Worker: ${state.serviceWorker}
-    ✅ Prompt Event: ${deferredPrompt ? 'SÍ' : 'NO'}  
-    ✅ App Instalada: ${state.isStandalone}
-    📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}`
-            );
+    ✅ Prompt Disponible: ${deferredPrompt ? 'SÍ' : 'NO'}  
+    ✅ App Instalada: ${isAppInstalled}
+    📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}
+    🖥️ User Agent: ${navigator.userAgent}`;
+
+            console.log('📊 Estado PWA:', status);
+            alert(status);
         };
 
-        // Reiniciar preferencias de instalación
-        window.resetInstallPreferences = function() {
-            localStorage.removeItem('installPromptShown');
-            alert('Preferencias reiniciadas. El modal aparecerá nuevamente.');
+        // Simular evento beforeinstallprompt (para testing)
+        window.simulateInstallPrompt = function() {
+            console.log('🎯 Simulando beforeinstallprompt...');
+            const event = new Event('beforeinstallprompt');
+            event.preventDefault = function() { console.log('preventDefault llamado'); };
+            event.prompt = function() { 
+                console.log('prompt llamado');
+                return Promise.resolve({ outcome: 'accepted' });
+            };
+            window.dispatchEvent(event);
+            
+            // Mostrar modal después de simular
+            setTimeout(() => {
+                showInstallModal();
+            }, 1000);
+        };
+
+        // Resetear estado de instalación (para testing)
+        window.resetInstallState = function() {
+            isAppInstalled = false;
+            deferredPrompt = null;
+            console.log('🔄 Estado de instalación reseteado');
+            alert('Estado reseteado. El modal aparecerá en la próxima visita.');
+        };
+
+        // Verificar elementos del DOM
+        window.checkDOMModal = function() {
+            const modal = document.getElementById('installModal');
+            const overlay = document.getElementById('installOverlay');
+            const badge = document.getElementById('installedBadge');
+            
+            console.log('🔍 Elementos DOM:');
+            console.log('   - Modal:', modal ? '✅ Encontrado' : '❌ No encontrado');
+            console.log('   - Overlay:', overlay ? '✅ Encontrado' : '❌ No encontrado');
+            console.log('   - Badge:', badge ? '✅ Encontrado' : '❌ No encontrado');
+            
+            if (modal) {
+                console.log('   - Modal display:', modal.style.display);
+            }
         };
     </script>
 
-<!-- Scripts externos -->
-<script src="js/exportador.js"></script>
-<script src="js/main.js"></script>
+    <!-- Scripts externos -->
+    <script src="js/exportador.js"></script>
+    <script src="js/main.js"></script>
 
-<!-- Scripts externos -->
-<script src="js/exportador.js"></script>
-<script src="js/main.js"></script>
+
+
 
 </body>
 </html>
