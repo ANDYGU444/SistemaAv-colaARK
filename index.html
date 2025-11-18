@@ -419,6 +419,166 @@
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Modal de Instalación PWA */
+        .install-modal {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            animation: slideUpInstall 0.5s ease-out;
+            border: 2px solid #4a7b5d;
+        }
+
+        @keyframes slideUpInstall {
+            from { 
+                transform: translateX(-50%) translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .install-modal-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .install-icon {
+            font-size: 3rem;
+            color: #4a7b5d;
+            margin-bottom: 10px;
+        }
+
+        .install-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4a7b5d;
+            margin-bottom: 8px;
+        }
+
+        .install-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .install-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-install-modal {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-install-primary {
+            background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
+            color: white;
+        }
+
+        .btn-install-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 123, 93, 0.4);
+        }
+
+        .btn-install-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-install-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .install-benefits {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .install-benefits h4 {
+            margin: 0 0 8px 0;
+            color: #4a7b5d;
+            font-size: 0.9rem;
+        }
+
+        .install-benefits ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+        }
+
+        .install-benefits li {
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        /* Overlay para modal */
+        .install-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+
+        /* Badge cuando está instalada */
+        .installed-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 10001;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .install-modal {
+                width: 95%;
+                bottom: 10px;
+            }
+            
+            .install-buttons {
+                flex-direction: column;
+            }
+            
+            .install-benefits {
+                display: none; /* Ocultar beneficios en móvil para ahorrar espacio */
+            }
+        }
+
+
+
+
     </style>
 </head>
 <body>
@@ -659,344 +819,329 @@
         <i class="fas fa-download"></i>
     </button>
 
-<script>
-    // =============================================
-    // SISTEMA PRINCIPAL - FUNCIONES BÁSICAS
-    // =============================================
-    
-    // Función para cargar estadísticas rápidas
-    function cargarEstadisticasRapidas() {
-        try {
-            // Transacciones
-            const transacciones = JSON.parse(localStorage.getItem('transactions')) || [];
-            document.getElementById('statTransacciones').textContent = transacciones.length;
-            
-            // Producción
-            const produccion = JSON.parse(localStorage.getItem('productionData')) || [];
-            document.getElementById('statProduccion').textContent = produccion.length;
-            
-            // Inventario
-            const inventario = JSON.parse(localStorage.getItem('inventoryData')) || [];
-            document.getElementById('statInventario').textContent = inventario.length;
-            
-            // Clientes
-            const opciones = JSON.parse(localStorage.getItem('transactionOptions')) || { customers: [] };
-            document.getElementById('statClientes').textContent = opciones.customers ? opciones.customers.length : 0;
-            
-        } catch (error) {
-            console.error('Error cargando estadísticas:', error);
-        }
-    }
+    <!-- Overlay para modal de instalación -->
+    <div class="install-overlay" id="installOverlay"></div>
 
-    // Función para generar reporte general
-    function generarReporteGeneral() {
-        try {
-            abrirBackupAvicola();
-            setTimeout(() => {
-                const btnReporte = document.querySelector('.btn-backup-info');
-                if (btnReporte) {
-                    btnReporte.click();
-                }
-            }, 500);
-        } catch (error) {
-            alert('Para ver reportes detallados, use la opción "Generar Reporte" en el sistema de Backup.');
-        }
-    }
+    <!-- Modal de Instalación PWA -->
+    <div class="install-modal" id="installModal">
+        <div class="install-modal-content">
+            <div class="install-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <h3 class="install-title">Instalar App Avícola</h3>
+            <p class="install-description">
+                Instala la aplicación para una experiencia mejorada: funciona offline, más rápida y como app nativa.
+            </p>
+            
+            <div class="install-benefits">
+                <h4>✅ Beneficios:</h4>
+                <ul>
+                    <li>Funciona sin conexión a internet</li>
+                    <li>Acceso rápido desde tu pantalla de inicio</li>
+                    <li>Notificaciones y actualizaciones automáticas</li>
+                    <li>Experiencia como app nativa</li>
+                </ul>
+            </div>
+            
+            <div class="install-buttons">
+                <button class="btn-install-modal btn-install-primary" onclick="installPWA()">
+                    <i class="fas fa-download"></i> Instalar App
+                </button>
+                <button class="btn-install-modal btn-install-secondary" onclick="closeInstallModal()">
+                    Ahora No
+                </button>
+            </div>
+        </div>
+    </div>
 
-    // =============================================
-    // SISTEMA PWA - INSTALACIÓN
-    // =============================================
-    
-    // Verificar requisitos PWA
-    function checkPWARequirements() {
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        const isAndroid = /Android/.test(navigator.userAgent);
+    <!-- Badge cuando está instalada -->
+    <div class="installed-badge" id="installedBadge" style="display: none;">
+        <i class="fas fa-check-circle"></i> App Instalada
+    </div>
+
+
+    <script>
+        // =============================================
+        // SISTEMA PRINCIPAL - FUNCIONES BÁSICAS
+        // =============================================
         
-        const requirements = {
-            serviceWorker: 'serviceWorker' in navigator,
-            beforeInstallPrompt: 'BeforeInstallPromptEvent' in window,
-            appInstalled: 'onappinstalled' in window,
-            isStandalone: window.matchMedia('(display-mode: standalone)').matches,
-            isIOS: isIOS,
-            isAndroid: isAndroid,
-            userAgent: navigator.userAgent
-        };
-        
-        console.log('📋 Estado PWA:', requirements);
-        return requirements;
-    }
-
-    // Mostrar instrucciones de instalación
-    function showInstallInstructions() {
-        const state = checkPWARequirements();
-        
-        if (state.isIOS) {
-            return 'Para instalar en iPhone/iPad: Toca el botón compartir 📤 → "Agregar a pantalla de inicio"';
-        } else if (state.isAndroid) {
-            return 'Para instalar en Android: Menú Chrome (⋮) → "Agregar a la pantalla de inicio"';
-        } else {
-            return 'Para instalar: Haz clic en "Instalar" en la barra de direcciones o en el botón de instalación';
-        }
-    }
-
-    // Registrar Service Worker
-    function registerServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(function(registration) {
-                    console.log('✅ ServiceWorker registrado:', registration.scope);
-                })
-                .catch(function(error) {
-                    console.log('❌ Error ServiceWorker:', error);
-                });
-        }
-    }
-
-    // =============================================
-    // INSTALADOR PWA SIMPLIFICADO Y FUNCIONAL
-    // =============================================
-    
-    class SimplePWAInstaller {
-        constructor() {
-            this.deferredPrompt = null;
-            this.isInstalled = false;
-            this.init();
-        }
-
-        init() {
-            console.log('🔧 Inicializando instalador PWA...');
-            this.setupEventListeners();
-            this.createInstallButton();
-            this.checkIfInstalled();
-        }
-
-        setupEventListeners() {
-            // Evento principal para instalación PWA
-            window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('🎯 beforeinstallprompt event fired!');
-                e.preventDefault();
-                this.deferredPrompt = e;
-                this.showInstallButton();
+        // Función para cargar estadísticas rápidas
+        function cargarEstadisticasRapidas() {
+            try {
+                const transacciones = JSON.parse(localStorage.getItem('transactions')) || [];
+                document.getElementById('statTransacciones').textContent = transacciones.length;
                 
-                // Mostrar banner después de 3 segundos
+                const produccion = JSON.parse(localStorage.getItem('productionData')) || [];
+                document.getElementById('statProduccion').textContent = produccion.length;
+                
+                const inventario = JSON.parse(localStorage.getItem('inventoryData')) || [];
+                document.getElementById('statInventario').textContent = inventario.length;
+                
+                const opciones = JSON.parse(localStorage.getItem('transactionOptions')) || { customers: [] };
+                document.getElementById('statClientes').textContent = opciones.customers ? opciones.customers.length : 0;
+                
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Función para generar reporte general
+        function generarReporteGeneral() {
+            try {
+                abrirBackupAvicola();
                 setTimeout(() => {
-                    if (!this.isInstalled) {
-                        this.showInstallBanner();
+                    const btnReporte = document.querySelector('.btn-backup-info');
+                    if (btnReporte) {
+                        btnReporte.click();
                     }
-                }, 3000);
-            });
-
-            // Cuando la app se instala
-            window.addEventListener('appinstalled', (evt) => {
-                console.log('🎉 App instalada!');
-                this.isInstalled = true;
-                this.hideInstallPrompts();
-                this.showSuccessMessage();
-            });
-        }
-
-        createInstallButton() {
-            // Botón flotante
-            this.installButton = document.createElement('button');
-            this.installButton.id = 'pwaInstallBtn';
-            this.installButton.innerHTML = '<i class="fas fa-download"></i> Instalar App';
-            this.installButton.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
-                color: white;
-                border: none;
-                border-radius: 50px;
-                padding: 12px 20px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                cursor: pointer;
-                z-index: 10000;
-                display: none;
-                align-items: center;
-                gap: 8px;
-                font-size: 14px;
-                font-weight: 600;
-                animation: pulse 2s infinite;
-            `;
-            
-            this.installButton.addEventListener('click', () => this.installApp());
-            document.body.appendChild(this.installButton);
-
-            // Agregar animación
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes pulse {
-                    0% { transform: scale(1); }
-                    50% { transform: scale(1.05); }
-                    100% { transform: scale(1); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        showInstallButton() {
-            if (this.installButton && this.deferredPrompt && !this.isInstalled) {
-                this.installButton.style.display = 'flex';
-                console.log('📱 Mostrando botón de instalación');
+                }, 500);
+            } catch (error) {
+                alert('Para ver reportes detallados, use la opción "Generar Reporte" en el sistema de Backup.');
             }
         }
 
-        showInstallBanner() {
-            if (this.isInstalled || !this.deferredPrompt) return;
+        // =============================================
+        // SISTEMA DE INSTALACIÓN PWA - MODAL INFERIOR
+        // =============================================
+        
+        let deferredPrompt = null;
+        let isAppInstalled = false;
 
-            const banner = document.createElement('div');
-            banner.id = 'installBanner';
-            banner.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0 0 5px 0; font-size: 16px;">📱 Instalar App Avícola</h4>
-                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">${showInstallInstructions()}</p>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button id="bannerInstallBtn" style="background: white; color: #4a7b5d; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer;">
-                            Instalar
-                        </button>
-                        <button onclick="simpleInstaller.hideInstallPrompts()" style="background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
-            `;
-            banner.style.cssText = `
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
-                color: white;
-                padding: 15px 20px;
-                z-index: 9999;
-                box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
-            `;
-
-            document.body.appendChild(banner);
-            document.getElementById('bannerInstallBtn').addEventListener('click', () => this.installApp());
+        // Verificar si la PWA puede instalarse
+        function checkPWARequirements() {
+            const requirements = {
+                serviceWorker: 'serviceWorker' in navigator,
+                beforeInstallPrompt: 'BeforeInstallPromptEvent' in window,
+                isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+                isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+                isAndroid: /Android/.test(navigator.userAgent)
+            };
+            
+            console.log('📋 Estado PWA:', requirements);
+            return requirements;
         }
 
-        hideInstallPrompts() {
-            // Ocultar botón
-            if (this.installButton) {
-                this.installButton.style.display = 'none';
+        // Mostrar modal de instalación
+        function showInstallModal() {
+            const modal = document.getElementById('installModal');
+            const overlay = document.getElementById('installOverlay');
+            
+            if (modal && overlay && !isAppInstalled) {
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+                
+                // Auto-cerrar después de 30 segundos
+                setTimeout(() => {
+                    closeInstallModal();
+                }, 30000);
+            }
+        }
+
+        // Cerrar modal de instalación
+        function closeInstallModal() {
+            const modal = document.getElementById('installModal');
+            const overlay = document.getElementById('installOverlay');
+            
+            if (modal && overlay) {
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
             }
             
-            // Ocultar banner
-            const banner = document.getElementById('installBanner');
-            if (banner) {
-                banner.remove();
-            }
+            // Guardar preferencia para no mostrar nuevamente por hoy
+            localStorage.setItem('installPromptShown', new Date().toDateString());
         }
 
-        async installApp() {
-            if (!this.deferredPrompt) {
-                this.showManualInstructions();
+        // Instalar la PWA
+        async function installPWA() {
+            if (!deferredPrompt) {
+                showManualInstructions();
+                closeInstallModal();
                 return;
             }
 
             try {
                 console.log('🔄 Iniciando instalación...');
-                this.deferredPrompt.prompt();
                 
-                const { outcome } = await this.deferredPrompt.userChoice;
+                // Mostrar el prompt de instalación nativo
+                deferredPrompt.prompt();
+                
+                // Esperar a que el usuario responda
+                const { outcome } = await deferredPrompt.userChoice;
                 console.log(`Usuario ${outcome} la instalación`);
                 
                 if (outcome === 'accepted') {
-                    this.isInstalled = true;
-                    this.hideInstallPrompts();
+                    console.log('🎉 Usuario aceptó la instalación');
+                    isAppInstalled = true;
+                    showInstalledBadge();
                 }
                 
-                this.deferredPrompt = null;
+                // Limpiar la referencia
+                deferredPrompt = null;
+                closeInstallModal();
+                
             } catch (error) {
-                console.error('Error instalando:', error);
-                this.showManualInstructions();
+                console.error('💥 Error durante la instalación:', error);
+                showManualInstructions();
+                closeInstallModal();
             }
         }
 
-        showManualInstructions() {
-            const instructions = showInstallInstructions();
+        // Mostrar instrucciones manuales
+        function showManualInstructions() {
+            const state = checkPWARequirements();
+            let instructions = '';
+            
+            if (state.isIOS) {
+                instructions = `
+                    Para instalar en iPhone/iPad:
+                    1. Toca el botón COMPARTIR 📤 (barra inferior)
+                    2. Desplaza hacia abajo
+                    3. Selecciona "AGREGAR A PANTALLA DE INICIO"
+                    4. Toca "AGREGAR" en la esquina superior derecha
+                `;
+            } else if (state.isAndroid) {
+                instructions = `
+                    Para instalar en Android:
+                    1. Toca el menú (⋮) en Chrome
+                    2. Selecciona "AGREGAR A LA PANTALLA DE INICIO" 
+                    3. Confirma tocando "AGREGAR"
+                `;
+            } else {
+                instructions = `
+                    Para instalar en Computadora:
+                    1. Haz clic en "INSTALAR" en la barra de direcciones
+                    2. O ve a Configuración → Más herramientas → Crear acceso directo
+                `;
+            }
+            
             alert(`📱 Instrucciones de Instalación:\n\n${instructions}`);
         }
 
-        showSuccessMessage() {
-            alert('🎉 ¡App instalada correctamente!\n\nAhora puedes abrirla desde tu pantalla de inicio.');
+        // Mostrar badge cuando está instalada
+        function showInstalledBadge() {
+            const badge = document.getElementById('installedBadge');
+            if (badge) {
+                badge.style.display = 'block';
+                setTimeout(() => {
+                    badge.style.display = 'none';
+                }, 5000);
+            }
         }
 
-        checkIfInstalled() {
+        // Verificar si ya está instalada
+        function checkIfInstalled() {
             if (window.matchMedia('(display-mode: standalone)').matches) {
                 console.log('✅ App ya está instalada');
-                this.isInstalled = true;
-                this.hideInstallPrompts();
+                isAppInstalled = true;
+                showInstalledBadge();
                 return true;
             }
             return false;
         }
-    }
 
-    // =============================================
-    // INICIALIZACIÓN PRINCIPAL
-    // =============================================
-    
-    let simpleInstaller;
-
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 Iniciando Sistema Avícola...');
-        
-        // 1. Sistema básico
-        cargarEstadisticasRapidas();
-        
-        // 2. Service Worker
-        registerServiceWorker();
-        
-        // 3. Instalador PWA
-        simpleInstaller = new SimplePWAInstaller();
-        
-        // 4. Verificar estado
-        const pwaState = checkPWARequirements();
-        console.log('📊 Estado inicial:', pwaState);
-        
-        // 5. Mensaje de bienvenida
-        const primeraVisita = !localStorage.getItem('transactions') && 
-                             !localStorage.getItem('productionData');
-        
-        if (primeraVisita) {
-            setTimeout(() => {
-                if (confirm('¡Bienvenido al Sistema Avícola!\n\n¿Desea ver el sistema de Backup?')) {
-                    abrirBackupAvicola();
-                }
-            }, 1000);
+        // Registrar Service Worker
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('✅ ServiceWorker registrado:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('❌ Error ServiceWorker:', error);
+                    });
+            }
         }
 
-        // Actualizar estadísticas periódicamente
-        setInterval(cargarEstadisticasRapidas, 30000);
-    });
+        // =============================================
+        // INICIALIZACIÓN PRINCIPAL
+        // =============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando Sistema Avícola...');
+            
+            // 1. Sistema básico
+            cargarEstadisticasRapidas();
+            
+            // 2. Service Worker
+            registerServiceWorker();
+            
+            // 3. Verificar si ya está instalada
+            checkIfInstalled();
+            
+            // 4. Configurar eventos de instalación PWA
+            window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('🎯 beforeinstallprompt event fired!');
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Verificar si ya mostramos el prompt hoy
+                const lastShown = localStorage.getItem('installPromptShown');
+                const today = new Date().toDateString();
+                
+                if (!isAppInstalled && lastShown !== today) {
+                    // Mostrar modal después de 5 segundos
+                    setTimeout(() => {
+                        showInstallModal();
+                    }, 5000);
+                }
+            });
 
-    // =============================================
-    // FUNCIONES GLOBALES PARA DEBUG
-    // =============================================
-    
-    window.forceInstallDemo = function() {
-        console.log('🔧 Forzando demostración...');
-        simpleInstaller.showInstallBanner();
-    };
+            // Cuando la app se instala
+            window.addEventListener('appinstalled', (evt) => {
+                console.log('🎉 App instalada correctamente!');
+                isAppInstalled = true;
+                showInstalledBadge();
+                closeInstallModal();
+            });
 
-    window.showPWAStatus = function() {
-        const state = checkPWARequirements();
-        alert(`Estado PWA:
-✅ Service Worker: ${state.serviceWorker}
-✅ Prompt Event: ${state.beforeInstallPrompt}  
-✅ App Instalada: ${state.isStandalone}
-📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}`
-        );
-    };
+            // 5. Mensaje de bienvenida
+            const primeraVisita = !localStorage.getItem('transactions') && 
+                                !localStorage.getItem('productionData');
+            
+            if (primeraVisita) {
+                setTimeout(() => {
+                    if (confirm('¡Bienvenido al Sistema Avícola!\n\n¿Desea ver el sistema de Backup?')) {
+                        abrirBackupAvicola();
+                    }
+                }, 1000);
+            }
 
-    // Hacer el instalador global
-    window.simpleInstaller = simpleInstaller;
-</script>
+            // Actualizar estadísticas periódicamente
+            setInterval(cargarEstadisticasRapidas, 30000);
+            
+            console.log('🔧 Sistema completamente inicializado');
+        });
+
+        // =============================================
+        // FUNCIONES GLOBALES PARA DEBUG
+        // =============================================
+        
+        // Forzar mostrar el modal (para testing)
+        window.forceShowInstallModal = function() {
+            showInstallModal();
+        };
+
+        // Mostrar estado PWA
+        window.showPWAStatus = function() {
+            const state = checkPWARequirements();
+            alert(`Estado PWA:
+    ✅ Service Worker: ${state.serviceWorker}
+    ✅ Prompt Event: ${deferredPrompt ? 'SÍ' : 'NO'}  
+    ✅ App Instalada: ${state.isStandalone}
+    📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}`
+            );
+        };
+
+        // Reiniciar preferencias de instalación
+        window.resetInstallPreferences = function() {
+            localStorage.removeItem('installPromptShown');
+            alert('Preferencias reiniciadas. El modal aparecerá nuevamente.');
+        };
+    </script>
+
+<!-- Scripts externos -->
+<script src="js/exportador.js"></script>
+<script src="js/main.js"></script>
 
 <!-- Scripts externos -->
 <script src="js/exportador.js"></script>
