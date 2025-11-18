@@ -863,22 +863,22 @@
         // =============================================
         // SISTEMA PRINCIPAL - FUNCIONES BÁSICAS
         // =============================================
-        
+
         // Función para cargar estadísticas rápidas
         function cargarEstadisticasRapidas() {
             try {
                 const transacciones = JSON.parse(localStorage.getItem('transactions')) || [];
                 document.getElementById('statTransacciones').textContent = transacciones.length;
-                
+
                 const produccion = JSON.parse(localStorage.getItem('productionData')) || [];
                 document.getElementById('statProduccion').textContent = produccion.length;
-                
+
                 const inventario = JSON.parse(localStorage.getItem('inventoryData')) || [];
                 document.getElementById('statInventario').textContent = inventario.length;
-                
+
                 const opciones = JSON.parse(localStorage.getItem('transactionOptions')) || { customers: [] };
                 document.getElementById('statClientes').textContent = opciones.customers ? opciones.customers.length : 0;
-                
+
             } catch (error) {
                 console.error('Error cargando estadísticas:', error);
             }
@@ -900,9 +900,9 @@
         }
 
         // =============================================
-        // SISTEMA DE INSTALACIÓN PWA - MODAL INFERIOR
+        // SISTEMA DE INSTALACIÓN PWA - SIMPLIFICADO Y CORREGIDO
         // =============================================
-        
+
         let deferredPrompt = null;
         let isAppInstalled = false;
 
@@ -915,7 +915,7 @@
                 isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
                 isAndroid: /Android/.test(navigator.userAgent)
             };
-            
+
             console.log('📋 Estado PWA:', requirements);
             return requirements;
         }
@@ -924,12 +924,12 @@
         function showInstallModal() {
             const modal = document.getElementById('installModal');
             const overlay = document.getElementById('installOverlay');
-            
+
             if (modal && overlay && !isAppInstalled) {
                 console.log('🔄 Mostrando modal de instalación...');
                 modal.style.display = 'block';
                 overlay.style.display = 'block';
-                
+
                 // Auto-cerrar después de 30 segundos
                 setTimeout(() => {
                     if (modal.style.display === 'block') {
@@ -937,12 +937,6 @@
                         closeInstallModal();
                     }
                 }, 30000);
-            } else {
-                console.log('❌ No se puede mostrar modal:', {
-                    modal: !!modal,
-                    overlay: !!overlay,
-                    installed: isAppInstalled
-                });
             }
         }
 
@@ -950,7 +944,7 @@
         function closeInstallModal() {
             const modal = document.getElementById('installModal');
             const overlay = document.getElementById('installOverlay');
-            
+
             if (modal && overlay) {
                 modal.style.display = 'none';
                 overlay.style.display = 'none';
@@ -983,7 +977,6 @@
                     showInstalledBadge();
                 } else {
                     console.log('❌ Usuario rechazó la instalación');
-                    // El modal seguirá apareciendo en futuras visitas
                 }
                 
                 // Limpiar la referencia
@@ -1001,30 +994,30 @@
         function showManualInstructions() {
             const state = checkPWARequirements();
             let instructions = '';
-            
+
             if (state.isIOS) {
                 instructions = `
-    Para instalar en iPhone/iPad:
-    1. Toca el botón COMPARTIR 📤 (barra inferior)
-    2. Desplaza hacia abajo
-    3. Selecciona "AGREGAR A PANTALLA DE INICIO"
-    4. Toca "AGREGAR" en la esquina superior derecha
+        Para instalar en iPhone/iPad:
+        1. Toca el botón COMPARTIR 📤 (barra inferior)
+        2. Desplaza hacia abajo
+        3. Selecciona "AGREGAR A PANTALLA DE INICIO"
+        4. Toca "AGREGAR" en la esquina superior derecha
                 `;
             } else if (state.isAndroid) {
                 instructions = `
-    Para instalar en Android:
-    1. Toca el menú (⋮) en Chrome
-    2. Selecciona "AGREGAR A LA PANTALLA DE INICIO" 
-    3. Confirma tocando "AGREGAR"
+        Para instalar en Android:
+        1. Toca el menú (⋮) en Chrome
+        2. Selecciona "AGREGAR A LA PANTALLA DE INICIO"
+        3. Confirma tocando "AGREGAR"
                 `;
             } else {
                 instructions = `
-    Para instalar en Computadora:
-    1. Haz clic en "INSTALAR" en la barra de direcciones
-    2. O ve a Configuración → Más herramientas → Crear acceso directo
+        Para instalar en Computadora:
+        1. Haz clic en "INSTALAR" en la barra de direcciones
+        2. O ve a Configuración → Más herramientas → Crear acceso directo
                 `;
             }
-            
+
             alert(`📱 Instrucciones de Instalación:\n\n${instructions}`);
         }
 
@@ -1047,7 +1040,7 @@
                 showInstalledBadge();
                 return true;
             }
-            
+
             // Verificar otros métodos
             if (window.navigator.standalone) {
                 console.log('✅ App ya está instalada (navigator.standalone)');
@@ -1055,7 +1048,7 @@
                 showInstalledBadge();
                 return true;
             }
-            
+
             console.log('❌ App no está instalada');
             return false;
         }
@@ -1078,33 +1071,31 @@
         // =============================================
         // INICIALIZACIÓN PRINCIPAL - CORREGIDA
         // =============================================
-        
+
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Iniciando Sistema Avícola...');
-            
+
             // 1. Sistema básico
             cargarEstadisticasRapidas();
-            
-            // 2. Service Worker
+
+            // 2. Service Worker - IMPORTANTE: Registrar primero
             registerServiceWorker();
-            
+
             // 3. Verificar si ya está instalada
             checkIfInstalled();
-            
+
             // 4. Configurar eventos de instalación PWA
             window.addEventListener('beforeinstallprompt', (e) => {
                 console.log('🎯 ¡beforeinstallprompt event fired!');
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // MOSTRAR MODAL SIEMPRE (eliminada la verificación de fecha)
+                // MOSTRAR MODAL automáticamente
                 if (!isAppInstalled) {
-                    console.log('📱 Mostrando modal en 3 segundos...');
+                    console.log('📱 Mostrando modal en 5 segundos...');
                     setTimeout(() => {
                         showInstallModal();
-                    }, 3000);
-                } else {
-                    console.log('✅ App ya instalada, no mostrar modal');
+                    }, 5000);
                 }
             });
 
@@ -1119,7 +1110,7 @@
             // 5. Mensaje de bienvenida
             const primeraVisita = !localStorage.getItem('transactions') && 
                                 !localStorage.getItem('productionData');
-            
+
             if (primeraVisita) {
                 setTimeout(() => {
                     if (confirm('¡Bienvenido al Sistema Avícola!\n\n¿Desea ver el sistema de Backup?')) {
@@ -1128,29 +1119,16 @@
                 }, 1000);
             }
 
-            // 6. Verificar si hay deferredPrompt ya disponible (por si el evento se disparó antes)
-            setTimeout(() => {
-                if (deferredPrompt && !isAppInstalled) {
-                    console.log('🔄 DeferredPrompt disponible, mostrando modal...');
-                    showInstallModal();
-                } else if (!deferredPrompt && !isAppInstalled) {
-                    console.log('ℹ️  No hay deferredPrompt disponible. Razones posibles:');
-                    console.log('   - No es la primera visita');
-                    console.log('   - Navegador no soporta PWA');
-                    console.log('   - Ya se mostró el prompt antes');
-                }
-            }, 2000);
-
             // Actualizar estadísticas periódicamente
             setInterval(cargarEstadisticasRapidas, 30000);
-            
+
             console.log('🔧 Sistema completamente inicializado');
         });
 
         // =============================================
         // FUNCIONES GLOBALES PARA DEBUG Y TESTING
         // =============================================
-        
+
         // Forzar mostrar el modal (para testing)
         window.forceShowInstallModal = function() {
             console.log('🔧 Forzando mostrar modal...');
@@ -1161,31 +1139,13 @@
         window.showPWAStatus = function() {
             const state = checkPWARequirements();
             const status = `Estado PWA:
-    ✅ Service Worker: ${state.serviceWorker}
-    ✅ Prompt Disponible: ${deferredPrompt ? 'SÍ' : 'NO'}  
-    ✅ App Instalada: ${isAppInstalled}
-    📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}
-    🖥️ User Agent: ${navigator.userAgent}`;
-
+        ✅ Service Worker: ${state.serviceWorker}
+        ✅ Prompt Disponible: ${deferredPrompt ? 'SÍ' : 'NO'}  
+        ✅ App Instalada: ${isAppInstalled}
+        📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}
+        🖥️ User Agent: ${navigator.userAgent}`;
             console.log('📊 Estado PWA:', status);
             alert(status);
-        };
-
-        // Simular evento beforeinstallprompt (para testing)
-        window.simulateInstallPrompt = function() {
-            console.log('🎯 Simulando beforeinstallprompt...');
-            const event = new Event('beforeinstallprompt');
-            event.preventDefault = function() { console.log('preventDefault llamado'); };
-            event.prompt = function() { 
-                console.log('prompt llamado');
-                return Promise.resolve({ outcome: 'accepted' });
-            };
-            window.dispatchEvent(event);
-            
-            // Mostrar modal después de simular
-            setTimeout(() => {
-                showInstallModal();
-            }, 1000);
         };
 
         // Resetear estado de instalación (para testing)
@@ -1194,22 +1154,6 @@
             deferredPrompt = null;
             console.log('🔄 Estado de instalación reseteado');
             alert('Estado reseteado. El modal aparecerá en la próxima visita.');
-        };
-
-        // Verificar elementos del DOM
-        window.checkDOMModal = function() {
-            const modal = document.getElementById('installModal');
-            const overlay = document.getElementById('installOverlay');
-            const badge = document.getElementById('installedBadge');
-            
-            console.log('🔍 Elementos DOM:');
-            console.log('   - Modal:', modal ? '✅ Encontrado' : '❌ No encontrado');
-            console.log('   - Overlay:', overlay ? '✅ Encontrado' : '❌ No encontrado');
-            console.log('   - Badge:', badge ? '✅ Encontrado' : '❌ No encontrado');
-            
-            if (modal) {
-                console.log('   - Modal display:', modal.style.display);
-            }
         };
     </script>
 
