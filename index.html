@@ -576,7 +576,54 @@
             }
         }
 
+        /* Botones del header */
+        .header-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
 
+        /* Botón de instalación en header */
+        .btn-install-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-install-header:hover {
+            background: linear-gradient(135deg, #218838, #1ea085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-install-header:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive para botones del header */
+        @media (max-width: 768px) {
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .btn-install-header,
+            .btn-backup-header {
+                width: 100%;
+                justify-content: center;
+                margin: 0.25rem 0;
+            }
+        }
 
 
     </style>
@@ -598,9 +645,19 @@
                         <li><a href="compradores.html"><i class="fas fa-users"></i> Compradores</a></li>
                     </ul>
                 </nav>
-                <button class="btn-backup-header" onclick="abrirBackupAvicola()">
-                    <i class="fas fa-database"></i> Backup
-                </button>
+                
+                <!-- BOTONES DEL HEADER -->
+                <div class="header-buttons">
+                    <!-- Botón de Instalación -->
+                    <button class="btn-install-header" id="headerInstallBtn" style="display: none;">
+                        <i class="fas fa-download"></i> Instalar App
+                    </button>
+                    
+                    <!-- Botón de Backup (existente) -->
+                    <button class="btn-backup-header" onclick="abrirBackupAvicola()">
+                        <i class="fas fa-database"></i> Backup
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -900,11 +957,20 @@
         }
 
         // =============================================
-        // SISTEMA DE INSTALACIÓN PWA - SIMPLIFICADO Y CORREGIDO
+        // SISTEMA DE INSTALACIÓN PWA - MEJORADO CON BOTÓN
         // =============================================
 
         let deferredPrompt = null;
         let isAppInstalled = false;
+
+        // Mostrar/ocultar botón de instalación en header
+        function toggleInstallButton(show) {
+            const installBtn = document.getElementById('headerInstallBtn');
+            if (installBtn) {
+                installBtn.style.display = show ? 'flex' : 'none';
+                console.log(`📱 Botón instalación: ${show ? 'VISIBLE' : 'OCULTO'}`);
+            }
+        }
 
         // Verificar si la PWA puede instalarse
         function checkPWARequirements() {
@@ -952,7 +1018,7 @@
             }
         }
 
-        // Instalar la PWA
+        // Instalar la PWA desde modal
         async function installPWA() {
             if (!deferredPrompt) {
                 console.log('❌ No hay prompt disponible, mostrando instrucciones manuales');
@@ -962,7 +1028,7 @@
             }
 
             try {
-                console.log('🔄 Iniciando instalación...');
+                console.log('🔄 Iniciando instalación desde modal...');
                 
                 // Mostrar el prompt de instalación nativo
                 deferredPrompt.prompt();
@@ -975,6 +1041,7 @@
                     console.log('🎉 Usuario aceptó la instalación');
                     isAppInstalled = true;
                     showInstalledBadge();
+                    toggleInstallButton(false);
                 } else {
                     console.log('❌ Usuario rechazó la instalación');
                 }
@@ -987,6 +1054,42 @@
                 console.error('💥 Error durante la instalación:', error);
                 showManualInstructions();
                 closeInstallModal();
+            }
+        }
+
+        // Instalar la PWA desde el botón del header
+        async function installFromHeader() {
+            if (!deferredPrompt) {
+                console.log('❌ No hay prompt disponible, mostrando instrucciones manuales');
+                showManualInstructions();
+                return;
+            }
+
+            try {
+                console.log('🔄 Iniciando instalación desde header...');
+                
+                // Mostrar el prompt de instalación nativo
+                deferredPrompt.prompt();
+                
+                // Esperar a que el usuario responda
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`✅ Usuario ${outcome} la instalación`);
+                
+                if (outcome === 'accepted') {
+                    console.log('🎉 Usuario aceptó la instalación');
+                    isAppInstalled = true;
+                    showInstalledBadge();
+                    toggleInstallButton(false);
+                } else {
+                    console.log('❌ Usuario rechazó la instalación');
+                }
+                
+                // Limpiar la referencia
+                deferredPrompt = null;
+                
+            } catch (error) {
+                console.error('💥 Error durante la instalación:', error);
+                showManualInstructions();
             }
         }
 
@@ -1018,7 +1121,39 @@
                 `;
             }
 
-            alert(`📱 Instrucciones de Instalación:\n\n${instructions}`);
+            // Mostrar en un modal más elegante
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: #4a7b5d;">📱 Instrucciones de Instalación</h3>
+                        <button onclick="this.closest('.install-instructions').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">×</button>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.5; white-space: pre-line;">
+                        ${instructions}
+                    </div>
+                    <button onclick="this.closest('.install-instructions').remove()" style="background: #4a7b5d; color: white; border: none; padding: 12px 24px; border-radius: 6px; margin-top: 20px; width: 100%; cursor: pointer; font-size: 16px;">
+                        Entendido
+                    </button>
+                </div>
+            `;
+            
+            modal.className = 'install-instructions';
+            document.body.appendChild(modal);
         }
 
         // Mostrar badge cuando está instalada
@@ -1038,6 +1173,7 @@
                 console.log('✅ App ya está instalada (modo standalone)');
                 isAppInstalled = true;
                 showInstalledBadge();
+                toggleInstallButton(false);
                 return true;
             }
 
@@ -1046,6 +1182,7 @@
                 console.log('✅ App ya está instalada (navigator.standalone)');
                 isAppInstalled = true;
                 showInstalledBadge();
+                toggleInstallButton(false);
                 return true;
             }
 
@@ -1069,7 +1206,7 @@
         }
 
         // =============================================
-        // INICIALIZACIÓN PRINCIPAL - CORREGIDA
+        // INICIALIZACIÓN PRINCIPAL - MEJORADA
         // =============================================
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1090,7 +1227,10 @@
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // MOSTRAR MODAL automáticamente
+                // MOSTRAR BOTÓN EN HEADER inmediatamente
+                toggleInstallButton(true);
+                
+                // MOSTRAR MODAL automáticamente después de 5 segundos
                 if (!isAppInstalled) {
                     console.log('📱 Mostrando modal en 5 segundos...');
                     setTimeout(() => {
@@ -1104,10 +1244,18 @@
                 console.log('🎉 ¡App instalada correctamente!');
                 isAppInstalled = true;
                 showInstalledBadge();
+                toggleInstallButton(false);
                 closeInstallModal();
             });
 
-            // 5. Mensaje de bienvenida
+            // 5. Configurar botón de instalación del header
+            const headerInstallBtn = document.getElementById('headerInstallBtn');
+            if (headerInstallBtn) {
+                headerInstallBtn.addEventListener('click', installFromHeader);
+                console.log('✅ Botón de instalación configurado');
+            }
+
+            // 6. Mensaje de bienvenida
             const primeraVisita = !localStorage.getItem('transactions') && 
                                 !localStorage.getItem('productionData');
 
@@ -1135,6 +1283,12 @@
             showInstallModal();
         };
 
+        // Forzar mostrar botón de instalación (para testing)
+        window.forceShowInstallButton = function() {
+            console.log('🔧 Forzando mostrar botón...');
+            toggleInstallButton(true);
+        };
+
         // Mostrar estado PWA
         window.showPWAStatus = function() {
             const state = checkPWARequirements();
@@ -1152,8 +1306,21 @@
         window.resetInstallState = function() {
             isAppInstalled = false;
             deferredPrompt = null;
+            toggleInstallButton(false);
             console.log('🔄 Estado de instalación reseteado');
-            alert('Estado reseteado. El modal aparecerá en la próxima visita.');
+            alert('Estado reseteado. El botón y modal aparecerán cuando esté disponible.');
+        };
+
+        // Simular evento beforeinstallprompt (para testing)
+        window.simulateInstallPrompt = function() {
+            console.log('🎯 Simulando beforeinstallprompt...');
+            const event = new Event('beforeinstallprompt');
+            event.preventDefault = function() { console.log('preventDefault llamado'); };
+            event.prompt = function() {
+                console.log('prompt llamado');
+                return Promise.resolve({ outcome: 'accepted' });
+            };
+            window.dispatchEvent(event);
         };
     </script>
 

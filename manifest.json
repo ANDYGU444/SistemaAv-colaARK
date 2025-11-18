@@ -1,7 +1,7 @@
 {
     "name": "Sistema Avícola",
     "short_name": "AvicolaApp",
-    "description": "Sistema de gestión completo para granjas avícolas",
+    "description": "Sistema de gestión completo para granjas avícolas - Control de producción, inventario, transacciones y clientes",
     "version": "2.0.0",
     "lang": "es",
     "dir": "ltr",
@@ -10,49 +10,123 @@
     "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
-    "start_url": "/",
-    "categories": ["business", "productivity"],
+    "start_url": "/index.html",
+    "categories": ["business", "productivity", "finance"],
+    
     "icons": [
         {
             "src": "/assets/icons/icon-72x72.png",
             "sizes": "72x72",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-96x96.png",
             "sizes": "96x96",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-128x128.png",
             "sizes": "128x128",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-144x144.png",
             "sizes": "144x144",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-152x152.png",
             "sizes": "152x152",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-192x192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "/assets/icons/icon-384x384.png",
             "sizes": "384x384",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/assets/icons/icon-512x512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    
+    "screenshots": [
+        {
+            "src": "/assets/screenshots/dashboard.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Dashboard Principal"
+        },
+        {
+            "src": "/assets/screenshots/transacciones.png", 
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Gestión de Transacciones"
+        }
+    ],
+    
+    "shortcuts": [
+        {
+            "name": "Nueva Transacción",
+            "short_name": "Transacción",
+            "description": "Agregar nueva transacción de ingresos o gastos",
+            "url": "/transacciones.html?action=new",
+            "icons": [
+                {
+                    "src": "/assets/icons/shortcut-transaction.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Registro Producción", 
+            "short_name": "Producción",
+            "description": "Registrar producción diaria de huevos",
+            "url": "/produccion.html",
+            "icons": [
+                {
+                    "src": "/assets/icons/shortcut-production.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Gestión Inventario",
+            "short_name": "Inventario", 
+            "description": "Control de stock y materiales",
+            "url": "/inventario.html",
+            "icons": [
+                {
+                    "src": "/assets/icons/shortcut-inventory.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Clientes y Ventas",
+            "short_name": "Clientes",
+            "description": "Administración de compradores y ventas",
+            "url": "/compradores.html",
+            "icons": [
+                {
+                    "src": "/assets/icons/shortcut-clients.png", 
+                    "sizes": "96x96"
+                }
+            ]
         }
     ]
 }

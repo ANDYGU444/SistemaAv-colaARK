@@ -3,8 +3,8 @@ const CACHE_NAME = 'avicola-app-v3.0.1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/transacciones.html', 
-  '/produccion.html',
+  '/transacciones.html',
+  '/produccion.html', 
   '/inventario.html',
   '/compradores.html',
   '/manifest.json',
