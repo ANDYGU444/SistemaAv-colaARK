@@ -6,9 +6,52 @@
     <title>Sistema de Gestión Avícola</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Sistema de Backup -->
-    <link rel="stylesheet" href="styles/backup.css">
+    <!-- PWA Meta Tags MEJORADAS -->
+    <meta name="theme-color" content="#4a7b5d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Avicola App">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#4a7b5d">
+    <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+
+    <!-- Icons MEJORADAS -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/icon-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/assets/icons/icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/icon-120x120.png">
     
+    <!-- Splash Screens para iOS -->
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/assets/splash/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+
+    <!-- Manifest MEJORADO -->
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles/backup.css">
+    <link rel="stylesheet" href="styles/mobile.css">
+    
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('SW registered'))
+                .catch(error => console.log('SW registration failed'));
+        }
+    </script>
+
     <style>
         :root {
             --primary: #4a7b5d;
@@ -272,6 +315,119 @@
                 font-size: 1.75rem;
             }
         }
+        /* Banner de instalación mejorado */
+        #installBanner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
+            color: white;
+            padding: 1rem;
+            z-index: 10000;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .install-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .install-text {
+            flex: 1;
+        }
+        
+        .install-text h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .install-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .install-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-install {
+            background: white;
+            color: #4a7b5d;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-install:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-install-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        /* Botón flotante de instalación */
+        .floating-install-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #4a7b5d;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 9999;
+            animation: pulse 2s infinite;
+            border: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Indicador de app instalada */
+        .app-installed-badge {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 9998;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -489,9 +645,33 @@
         </div>
     </div>
 
+    <!-- Banner de instalación (se muestra automáticamente) -->
+    <div id="installBanner" style="display: none;">
+        <div class="install-content">
+            <div class="install-text">
+                <h4>📱 Instalar App Avícola</h4>
+                <p>Obtén la experiencia completa: funciona offline, más rápido y como app nativa</p>
+            </div>
+            <div class="install-buttons">
+                <button class="btn-install" onclick="mobileApp.installApp()">
+                    <i class="fas fa-download"></i> Instalar App
+                </button>
+                <button class="btn-install btn-install-secondary" onclick="mobileApp.hideInstallPrompt()">
+                    Ahora No
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón flotante de instalación -->
+    <button class="floating-install-btn" id="floatingInstallBtn" style="display: none;" onclick="mobileApp.installApp()">
+        <i class="fas fa-download"></i>
+    </button>
+
     <!-- Scripts del Sistema -->
     <script src="js/exportador.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/app.js"></script>
 
     <script>
         // Función para cargar estadísticas rápidas
@@ -558,6 +738,77 @@
 
         // Actualizar estadísticas cada 30 segundos
         setInterval(cargarEstadisticasRapidas, 30000);
+
+        // Service Worker MEJORADO
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('SW registrado correctamente:', registration);
+                    
+                    // Verificar si ya está instalada
+                    if (window.matchMedia('(display-mode: standalone)').matches) {
+                        document.body.classList.add('standalone');
+                        mobileApp.showAppInstalledBadge();
+                    }
+                })
+                .catch(error => console.log('Error registrando SW:', error));
+        }
+
+        // Detectar si es móvil
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        }
+
+        // Mostrar instrucciones de instalación según el dispositivo
+        function showInstallInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            if (isIOS) {
+                return `
+                    <strong>Para instalar en iOS:</strong>
+                    <ol>
+                        <li>Toca el botón compartir 📤</li>
+                        <li>Desplaza hacia abajo</li>
+                        <li>Selecciona "Agregar a pantalla de inicio"</li>
+                        <li>Confirma la instalación</li>
+                    </ol>
+                `;
+            } else if (isAndroid) {
+                return `
+                    <strong>Para instalar en Android:</strong>
+                    <ol>
+                        <li>Toca el menú (⋮) en Chrome</li>
+                        <li>Selecciona "Agregar a la pantalla de inicio"</li>
+                        <li>Confirma la instalación</li>
+                    </ol>
+                `;
+            } else {
+                return `
+                    <strong>Para instalar en PC:</strong>
+                    <ol>
+                        <li>Haz clic en el botón "Instalar" en la barra de direcciones</li>
+                        <li>O ve a Configuración → Más herramientas → Crear acceso directo</li>
+                    </ol>
+                `;
+            }
+        }
+
+        // Actualizar el banner con instrucciones específicas
+        document.addEventListener('DOMContentLoaded', function() {
+            const installText = document.querySelector('.install-text p');
+            if (installText) {
+                installText.innerHTML = showInstallInstructions();
+            }
+            
+            // Mostrar banner después de 5 segundos
+            setTimeout(() => {
+                if (!document.body.classList.contains('standalone')) {
+                    mobileApp.showInstallPrompt();
+                }
+            }, 5000);
+        });
+
     </script>
 </body>
 </html>
