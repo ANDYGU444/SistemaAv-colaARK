@@ -11,7 +11,8 @@ const urlsToCache = [
     '/styles/mobile.css',
     '/js/exportador.js',
     '/js/main.js',
-    '/js/app.js',
+    // ELIMINA esta línea ↓
+    // '/js/app.js',
     '/manifest.json',
     '/assets/icons/icon-192x192.png',
     '/assets/icons/icon-512x512.png',
