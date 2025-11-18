@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Avícola</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de Backup -->
+    <link rel="stylesheet" href="styles/backup.css">
+    
     <style>
         :root {
             --primary: #4a7b5d;
@@ -13,15 +17,17 @@
             --dark: #343a40;
             --success: #28a745;
             --danger: #dc3545;
+            --info: #17a2b8;
+            --warning: #ffc107;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: #f5f5f5;
             color: var(--dark);
@@ -29,46 +35,46 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 15px;
         }
-        
+
         header {
             background-color: var(--primary);
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-        
+
         .logo i {
             margin-right: 10px;
         }
-        
+
         nav ul {
             display: flex;
             list-style: none;
         }
-        
+
         nav li {
             margin-left: 1.5rem;
         }
-        
+
         nav a {
             color: white;
             text-decoration: none;
@@ -78,45 +84,63 @@
             display: flex;
             align-items: center;
         }
-        
+
         nav a i {
             margin-right: 5px;
         }
-        
+
         nav a:hover, nav a.active {
             background-color: rgba(255,255,255,0.2);
         }
-        
+
+        .btn-backup-header {
+            background-color: var(--info);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-backup-header:hover {
+            background-color: #138496;
+        }
+
         main {
             flex: 1;
             padding: 2rem 0;
         }
-        
+
         .welcome-section {
             text-align: center;
             padding: 3rem 0;
         }
-        
+
         .welcome-section h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--primary);
         }
-        
+
         .welcome-section p {
             font-size: 1.2rem;
             color: #6c757d;
             max-width: 600px;
             margin: 0 auto 2rem;
         }
-        
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
-        
+
         .feature-card {
             background: white;
             border-radius: 8px;
@@ -124,23 +148,24 @@
             text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .feature-icon {
             font-size: 3rem;
             color: var(--primary);
             margin-bottom: 1rem;
         }
-        
+
         .feature-card h3 {
             margin-bottom: 1rem;
             color: var(--primary);
         }
-        
+
         .btn {
             display: inline-block;
             background-color: var(--primary);
@@ -150,12 +175,19 @@
             text-decoration: none;
             margin-top: 1rem;
             transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
         }
-        
+
         .btn:hover {
             background-color: #3a6a4a;
         }
-        
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
         footer {
             background-color: var(--dark);
             color: white;
@@ -163,21 +195,81 @@
             padding: 1rem 0;
             margin-top: auto;
         }
-        
+
+        /* Estadísticas rápidas */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             nav ul {
                 margin-top: 1rem;
                 justify-content: center;
                 flex-wrap: wrap;
             }
-            
+
             nav li {
                 margin: 0.5rem;
+            }
+
+            .btn-backup-header {
+                margin: 1rem 0 0 0;
+            }
+
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section {
+                padding: 2rem 0;
+            }
+            
+            .welcome-section h1 {
+                font-size: 1.75rem;
             }
         }
     </style>
@@ -192,23 +284,46 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a></li>
                         <li><a href="transacciones.html"><i class="fas fa-money-bill-wave"></i> Transacciones</a></li>
                         <li><a href="produccion.html"><i class="fas fa-egg"></i> Producción</a></li>
                         <li><a href="inventario.html"><i class="fas fa-boxes"></i> Inventario</a></li>
-                        <li><a href="compradores.html" class="active"><i class="fas fa-users"></i> Compradores</a></li>
+                        <li><a href="compradores.html"><i class="fas fa-users"></i> Compradores</a></li>
                     </ul>
                 </nav>
+                <button class="btn-backup-header" onclick="abrirBackupAvicola()">
+                    <i class="fas fa-database"></i> Backup
+                </button>
             </div>
         </div>
     </header>
-    
+
     <main>
         <div class="container">
             <section class="welcome-section">
                 <h1>Bienvenido al Sistema de Gestión Avícola</h1>
                 <p>Gestiona de manera eficiente tu granja avícola con nuestro sistema integral de control de producción, ventas, inventario y finanzas.</p>
-                
+
+                <!-- Estadísticas Rápidas -->
+                <div class="quick-stats" id="quickStats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="statTransacciones">0</span>
+                        <span class="stat-label">Transacciones</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="statProduccion">0</span>
+                        <span class="stat-label">Registros Producción</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="statInventario">0</span>
+                        <span class="stat-label">Items Inventario</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="statClientes">0</span>
+                        <span class="stat-label">Clientes</span>
+                    </div>
+                </div>
+
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
@@ -216,45 +331,233 @@
                         </div>
                         <h3>Control de Transacciones</h3>
                         <p>Registra y gestiona todos tus ingresos y gastos de manera organizada.</p>
-                        <a href="transacciones.html" class="btn">Ir a Transacciones</a>
+                        <a href="transacciones.html" class="btn">
+                            <i class="fas fa-money-bill-wave"></i> Ir a Transacciones
+                        </a>
                     </div>
-                    
+
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-egg"></i>
                         </div>
                         <h3>Registro de Producción</h3>
                         <p>Lleva el control diario de la producción de huevos por cubículo.</p>
-                        <a href="produccion.html" class="btn">Ir a Producción</a>
+                        <a href="produccion.html" class="btn">
+                            <i class="fas fa-egg"></i> Ir a Producción
+                        </a>
                     </div>
-                    
+
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
                         <h3>Gestión de Ventas</h3>
                         <p>Administra tus clientes, pedidos y entregas de manera eficiente.</p>
-                        <a href="ventas.html" class="btn">Ir a Ventas</a>
+                        <a href="compradores.html" class="btn">
+                            <i class="fas fa-users"></i> Ir a Compradores
+                        </a>
                     </div>
-                    
+
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-boxes"></i>
                         </div>
                         <h3>Control de Inventario</h3>
                         <p>Mantén el control de tus insumos y materiales en todo momento.</p>
-                        <a href="inventario.html" class="btn">Ir a Inventario</a>
+                        <a href="inventario.html" class="btn">
+                            <i class="fas fa-boxes"></i> Ir a Inventario
+                        </a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Backup Seguro</h3>
+                        <p>Exporta e importa todos los datos del sistema de forma segura con encriptación.</p>
+                        <button onclick="abrirBackupAvicola()" class="btn">
+                            <i class="fas fa-database"></i> Gestionar Backup
+                        </button>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Reportes y Análisis</h3>
+                        <p>Genera reportes detallados y análisis de tu operación avícola.</p>
+                        <button onclick="generarReporteGeneral()" class="btn">
+                            <i class="fas fa-chart-bar"></i> Ver Reportes
+                        </button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
-    
+
     <footer>
         <div class="container">
             <p>&copy; 2025 Sistema de Gestión Avícola.</p>
             <p>By ARK . Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <!-- Modal de Backup -->
+    <div id="modalBackupAvicola" class="modal-backup">
+        <div class="modal-backup-content">
+            <div class="modal-backup-header">
+                <div class="modal-backup-title">
+                    <i class="fas fa-database"></i>
+                    Sistema de Backup - Avícola
+                </div>
+                <button class="modal-backup-close">&times;</button>
+            </div>
+            <div class="modal-backup-body">
+                <div id="backupAlerts"></div>
+                
+                <!-- Resumen de Datos -->
+                <div class="backup-card">
+                    <h3><i class="fas fa-chart-bar"></i> Resumen de Datos Actuales</h3>
+                    <div id="resumenDatos" class="resumen-backup">
+                        <!-- Resumen se cargará aquí -->
+                    </div>
+                    <button onclick="sistemaBackupUI.verificarIntegridad()" class="btn-backup btn-backup-info">
+                        <i class="fas fa-shield-alt"></i> Verificar Integridad
+                    </button>
+                </div>
+
+                <!-- Exportación -->
+                <div class="backup-card">
+                    <h3><i class="fas fa-file-export"></i> Exportar Datos</h3>
+                    <p>Exporta todos los datos del sistema a un archivo JSON seguro para backup.</p>
+                    
+                    <div class="export-options">
+                        <div class="option-group">
+                            <input type="checkbox" id="comprimirExportacion">
+                            <label for="comprimirExportacion">Comprimir archivo (reduce tamaño)</label>
+                        </div>
+                        <div class="option-group">
+                            <input type="checkbox" id="incluirMetadata" checked>
+                            <label for="incluirMetadata">Incluir metadata de seguridad</label>
+                        </div>
+                    </div>
+                    
+                    <button onclick="sistemaBackupUI.exportarDatos()" class="btn-backup btn-backup-primary">
+                        <i class="fas fa-download"></i> Descargar Backup Completo
+                    </button>
+                </div>
+
+                <!-- Importación -->
+                <div class="backup-card">
+                    <h3><i class="fas fa-file-import"></i> Importar Datos</h3>
+                    <p>Restaura los datos del sistema desde un archivo JSON de backup.</p>
+                    
+                    <div class="warning-banner">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>¡Advertencia!</strong> Esta acción sobrescribirá todos los datos actuales.
+                            Se creará un backup automático antes de la importación.
+                        </div>
+                    </div>
+
+                    <div class="file-input-container">
+                        <input type="file" id="archivoBackup" accept=".json" style="display: none;">
+                        <button onclick="document.getElementById('archivoBackup').click()" class="btn-backup btn-backup-warning">
+                            <i class="fas fa-folder-open"></i> Seleccionar Archivo
+                        </button>
+                        <span id="nombreArchivo" class="file-name">No se ha seleccionado ningún archivo</span>
+                    </div>
+                    
+                    <button onclick="sistemaBackupUI.importarDatos()" id="btnImportar" class="btn-backup btn-backup-success" disabled>
+                        <i class="fas fa-file-import"></i> Importar Datos
+                    </button>
+                </div>
+
+                <!-- Herramientas Adicionales -->
+                <div class="backup-card">
+                    <h3><i class="fas fa-tools"></i> Herramientas</h3>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button onclick="sistemaBackupUI.generarReporte()" class="btn-backup btn-backup-info">
+                            <i class="fas fa-file-alt"></i> Generar Reporte
+                        </button>
+                        <button onclick="sistemaBackupUI.limpiarDatos()" class="btn-backup btn-backup-danger">
+                            <i class="fas fa-broom"></i> Limpiar Datos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts del Sistema -->
+    <script src="js/exportador.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Función para cargar estadísticas rápidas
+        function cargarEstadisticasRapidas() {
+            try {
+                // Transacciones
+                const transacciones = JSON.parse(localStorage.getItem('transactions')) || [];
+                document.getElementById('statTransacciones').textContent = transacciones.length;
+                
+                // Producción
+                const produccion = JSON.parse(localStorage.getItem('productionData')) || [];
+                document.getElementById('statProduccion').textContent = produccion.length;
+                
+                // Inventario
+                const inventario = JSON.parse(localStorage.getItem('inventoryData')) || [];
+                document.getElementById('statInventario').textContent = inventario.length;
+                
+                // Clientes
+                const opciones = JSON.parse(localStorage.getItem('transactionOptions')) || { customers: [] };
+                document.getElementById('statClientes').textContent = opciones.customers ? opciones.customers.length : 0;
+                
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Función para generar reporte general
+        function generarReporteGeneral() {
+            // Primero intentar abrir el modal de backup
+            try {
+                abrirBackupAvicola();
+                // Esperar un momento y luego hacer clic en el botón de reporte
+                setTimeout(() => {
+                    const btnReporte = document.querySelector('.btn-backup-info');
+                    if (btnReporte) {
+                        btnReporte.click();
+                    }
+                }, 500);
+            } catch (error) {
+                // Fallback: mostrar mensaje simple
+                alert('Para ver reportes detallados, use la opción "Generar Reporte" en el sistema de Backup.');
+            }
+        }
+
+        // Inicializar cuando la página cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarEstadisticasRapidas();
+            
+            // Mostrar mensaje de bienvenida si es la primera visita
+            const primeraVisita = !localStorage.getItem('transactions') && 
+                                 !localStorage.getItem('productionData') && 
+                                 !localStorage.getItem('inventoryData');
+            
+            if (primeraVisita) {
+                setTimeout(() => {
+                    if (confirm('¡Bienvenido al Sistema Avícola!\n\n¿Desea ver una guía rápida del sistema de Backup para proteger sus datos?')) {
+                        abrirBackupAvicola();
+                    }
+                }, 1000);
+            }
+            
+            console.log('Sistema Avícola cargado correctamente');
+        });
+
+        // Actualizar estadísticas cada 30 segundos
+        setInterval(cargarEstadisticasRapidas, 30000);
+    </script>
 </body>
 </html>

@@ -1,0 +1,520 @@
+/* Estilos para el Sistema de Backup - Sistema Avícola */
+:root {
+    --backup-primary: #2c5aa0;
+    --backup-success: #28a745;
+    --backup-warning: #ffc107;
+    --backup-danger: #dc3545;
+    --backup-info: #17a2b8;
+    --backup-light: #f8f9fa;
+    --backup-dark: #343a40;
+}
+
+/* Modal de Backup */
+.modal-backup {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-backup-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-backup-header {
+    background: linear-gradient(135deg, var(--primary), var(--backup-primary));
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-backup-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal-backup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.modal-backup-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-backup-body {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Tarjetas de Backup */
+.backup-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--backup-primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.backup-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.backup-card h3 {
+    color: var(--backup-primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.backup-card p {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+/* Resumen de Datos */
+.resumen-backup {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.resumen-item {
+    background: var(--backup-light);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.resumen-item:hover {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.resumen-number {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--backup-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.resumen-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Opciones de Exportación */
+.export-options {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border: 1px dashed #dee2e6;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.option-group label {
+    margin: 0;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+}
+
+.option-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Sección de Importación */
+.import-section {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.warning-banner {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 1px solid #fdcb6e;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.warning-banner i {
+    color: #e17055;
+    font-size: 1.25rem;
+}
+
+.warning-banner strong {
+    color: #d63031;
+}
+
+.file-input-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.file-name {
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    flex: 1;
+    min-width: 200px;
+    color: #495057;
+    font-style: italic;
+}
+
+.file-name.has-file {
+    color: var(--backup-success);
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* Botones de Backup */
+.btn-backup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.btn-backup:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-backup:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-backup-primary {
+    background: linear-gradient(135deg, var(--backup-primary), #1e4a8a);
+    color: white;
+}
+
+.btn-backup-success {
+    background: linear-gradient(135deg, var(--backup-success), #1e7b34);
+    color: white;
+}
+
+.btn-backup-warning {
+    background: linear-gradient(135deg, var(--backup-warning), #e6ac00);
+    color: var(--backup-dark);
+}
+
+.btn-backup-danger {
+    background: linear-gradient(135deg, var(--backup-danger), #bd2130);
+    color: white;
+}
+
+.btn-backup-info {
+    background: linear-gradient(135deg, var(--backup-info), #138496);
+    color: white;
+}
+
+/* Estados de Proceso */
+.processing {
+    position: relative;
+    pointer-events: none;
+}
+
+.processing::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Alertas de Backup */
+.backup-alert {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideIn 0.3s ease;
+}
+
+.backup-alert.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.backup-alert.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.backup-alert.warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.backup-alert.info {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Estadísticas Detalladas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--backup-primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Integridad de Datos */
+.integrity-check {
+    background: #e8f5e8;
+    border: 1px solid #d4edda;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.integrity-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-good {
+    background: var(--backup-success);
+    color: white;
+}
+
+.status-bad {
+    background: var(--backup-danger);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-backup-content {
+        margin: 5% auto;
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .modal-backup-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .modal-backup-body {
+        padding: 1.5rem;
+    }
+    
+    .resumen-backup {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .file-input-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .file-name {
+        min-width: auto;
+        text-align: center;
+    }
+    
+    .btn-backup {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-backup-content {
+        margin: 2% auto;
+        width: 98%;
+    }
+    
+    .resumen-backup {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .resumen-number {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animaciones adicionales */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Scrollbar personalizado para modal */
+.modal-backup-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-backup-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.modal-backup-body::-webkit-scrollbar-thumb {
+    background: var(--backup-primary);
+    border-radius: 3px;
+}
+
+.modal-backup-body::-webkit-scrollbar-thumb:hover {
+    background: #1e4a8a;
+}
