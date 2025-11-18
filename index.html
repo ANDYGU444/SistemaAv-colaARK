@@ -668,11 +668,6 @@
         <i class="fas fa-download"></i>
     </button>
 
-    <!-- Scripts del Sistema -->
-    <script src="js/exportador.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/app.js"></script>
-
     <script>
         // Función para cargar estadísticas rápidas
         function cargarEstadisticasRapidas() {
@@ -715,15 +710,90 @@
                 alert('Para ver reportes detallados, use la opción "Generar Reporte" en el sistema de Backup.');
             }
         }
-
-        // Inicializar cuando la página cargue
+        // Verificar requisitos PWA y estado de instalación
+        function checkPWARequirements() {
+            const requirements = {
+                serviceWorker: 'serviceWorker' in navigator,
+                beforeInstallPrompt: 'BeforeInstallPromptEvent' in window,
+                appInstalled: 'onappinstalled' in window,
+                isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+                isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+                isAndroid: /Android/.test(navigator.userAgent)
+            };
+            
+            console.log('📋 Estado PWA:', requirements);
+            return requirements;
+        }
+        // Mostrar instrucciones de instalación según el dispositivo
+        function showInstallInstructions() {
+            const state = checkPWARequirements();
+            
+            if (state.isIOS) {
+                return `
+                    <strong>Para instalar en iPhone/iPad:</strong>
+                    <ol>
+                        <li>Toca el botón <strong>compartir</strong> 📤 (barra inferior)</li>
+                        <li>Desplaza hacia abajo en el menú</li>
+                        <li>Selecciona <strong>"Agregar a pantalla de inicio"</strong></li>
+                        <li>Confirma tocando <strong>"Agregar"</strong></li>
+                    </ol>
+                `;
+            } else if (state.isAndroid) {
+                return `
+                    <strong>Para instalar en Android:</strong>
+                    <ol>
+                        <li>Toca el menú <strong>(⋮)</strong> en Chrome (esquina superior derecha)</li>
+                        <li>Selecciona <strong>"Agregar a la pantalla de inicio"</strong></li>
+                        <li>Confirma tocando <strong>"Agregar"</strong></li>
+                    </ol>
+                `;
+            } else {
+                return `
+                    <strong>Para instalar en Computadora:</strong>
+                    <ol>
+                        <li>Haz clic en el botón <strong>"Instalar"</strong> en la barra de direcciones</li>
+                        <li>O ve a <strong>Configuración → Más herramientas → Crear acceso directo</strong></li>
+                    </ol>
+                `;
+            }
+        }
+        // Service Worker Registration MEJORADO
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('✅ ServiceWorker registrado con éxito:', registration.scope);
+                        
+                        // Verificar si la app ya está instalada
+                        if (window.matchMedia('(display-mode: standalone)').matches) {
+                            console.log('📱 App ejecutándose en modo standalone (instalada)');
+                            document.body.classList.add('standalone');
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('❌ Error registrando ServiceWorker:', error);
+                    });
+            } else {
+                console.log('❌ Service Worker no soportado en este navegador');
+            }
+        }
+        // Inicialización completa del sistema
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando Sistema Avícola...');
+            
+            // 1. Cargar estadísticas
             cargarEstadisticasRapidas();
             
-            // Mostrar mensaje de bienvenida si es la primera visita
+            // 2. Registrar Service Worker
+            registerServiceWorker();
+            
+            // 3. Verificar requisitos PWA
+            const pwaState = checkPWARequirements();
+            
+            // 4. Mostrar mensaje de bienvenida si es la primera visita
             const primeraVisita = !localStorage.getItem('transactions') && 
-                                 !localStorage.getItem('productionData') && 
-                                 !localStorage.getItem('inventoryData');
+                                !localStorage.getItem('productionData') && 
+                                !localStorage.getItem('inventoryData');
             
             if (primeraVisita) {
                 setTimeout(() => {
@@ -733,82 +803,76 @@
                 }, 1000);
             }
             
-            console.log('Sistema Avícola cargado correctamente');
+            // 5. Actualizar instrucciones de instalación
+            setTimeout(() => {
+                const installText = document.querySelector('.install-text p');
+                if (installText) {
+                    installText.innerHTML = showInstallInstructions();
+                }
+            }, 1000);
+            // 6. Mostrar información de debug en consola
+            console.log('🔧 Sistema completamente inicializado');
+            console.log('📱 Estado PWA:', pwaState);
+            
+            if (!pwaState.serviceWorker) {
+                console.log('💡 Consejo: Usa Chrome/Edge para mejor soporte PWA');
+            }
         });
-
         // Actualizar estadísticas cada 30 segundos
         setInterval(cargarEstadisticasRapidas, 30000);
 
-        // Service Worker MEJORADO
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => {
-                    console.log('SW registrado correctamente:', registration);
-                    
-                    // Verificar si ya está instalada
-                    if (window.matchMedia('(display-mode: standalone)').matches) {
-                        document.body.classList.add('standalone');
-                        mobileApp.showAppInstalledBadge();
-                    }
-                })
-                .catch(error => console.log('Error registrando SW:', error));
-        }
-
-        // Detectar si es móvil
-        function isMobileDevice() {
-            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-        }
-
-        // Mostrar instrucciones de instalación según el dispositivo
-        function showInstallInstructions() {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isAndroid = /Android/.test(navigator.userAgent);
+        // Detectar cambios en el modo de visualización (para cuando se instala)
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('🎉 ¡App instalada correctamente!');
+            document.body.classList.add('standalone');
             
-            if (isIOS) {
-                return `
-                    <strong>Para instalar en iOS:</strong>
-                    <ol>
-                        <li>Toca el botón compartir 📤</li>
-                        <li>Desplaza hacia abajo</li>
-                        <li>Selecciona "Agregar a pantalla de inicio"</li>
-                        <li>Confirma la instalación</li>
-                    </ol>
-                `;
-            } else if (isAndroid) {
-                return `
-                    <strong>Para instalar en Android:</strong>
-                    <ol>
-                        <li>Toca el menú (⋮) en Chrome</li>
-                        <li>Selecciona "Agregar a la pantalla de inicio"</li>
-                        <li>Confirma la instalación</li>
-                    </ol>
-                `;
-            } else {
-                return `
-                    <strong>Para instalar en PC:</strong>
-                    <ol>
-                        <li>Haz clic en el botón "Instalar" en la barra de direcciones</li>
-                        <li>O ve a Configuración → Más herramientas → Crear acceso directo</li>
-                    </ol>
-                `;
-            }
-        }
-
-        // Actualizar el banner con instrucciones específicas
-        document.addEventListener('DOMContentLoaded', function() {
-            const installText = document.querySelector('.install-text p');
-            if (installText) {
-                installText.innerHTML = showInstallInstructions();
-            }
-            
-            // Mostrar banner después de 5 segundos
+            // Mostrar mensaje de éxito
             setTimeout(() => {
-                if (!document.body.classList.contains('standalone')) {
-                    mobileApp.showInstallPrompt();
+                if (typeof pwaInstaller !== 'undefined') {
+                    pwaInstaller.showSuccessMessage();
                 }
-            }, 5000);
+            }, 1000);
         });
-
+        // Manejar cuando la app se abre desde la pantalla de inicio
+        window.addEventListener('load', function() {
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('📱 App abierta desde pantalla de inicio');
+                document.body.classList.add('standalone');
+            }
+        });
+        // Función global para forzar la instalación (útil para debugging)
+        window.forceInstallDemo = function() {
+            console.log('🔧 Forzando demostración de instalación...');
+            
+            // Simular el evento beforeinstallprompt para testing
+            const event = new Event('beforeinstallprompt');
+            event.preventDefault = function() {};
+            event.prompt = function() {
+                return Promise.resolve({ outcome: 'accepted' });
+            };
+            window.dispatchEvent(event);
+            
+            // Mostrar instrucciones
+            const instructions = showInstallInstructions();
+            alert('Instrucciones de instalación:\n\n' + instructions.replace(/<[^>]*>/g, ''));
+        };
+        // Debug helper
+        window.showPWAStatus = function() {
+            const state = checkPWARequirements();
+            alert(`Estado PWA:
+    ✅ Service Worker: ${state.serviceWorker}
+    ✅ Prompt Event: ${state.beforeInstallPrompt}  
+    ✅ App Installed: ${state.isStandalone}
+    📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}`
+            );
+        };
     </script>
+
+    <!-- Scripts externos (deben ir AL FINAL del body) -->
+    <script src="js/exportador.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/installer.js"></script>
+    <script src="js/app.js"></script>
+
 </body>
 </html>

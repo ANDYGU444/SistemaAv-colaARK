@@ -1,16 +1,17 @@
 {
     "name": "Sistema Avícola",
     "short_name": "AvicolaApp",
-    "description": "Sistema de gestión para granjas avícolas",
+    "description": "Sistema de gestión completo para granjas avícolas",
     "version": "2.0.0",
     "lang": "es",
     "dir": "ltr",
     "theme_color": "#4a7b5d",
-    "background_color": "#ffffff",
+    "background_color": "#4a7b5d",
     "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
     "start_url": "/",
+    "categories": ["business", "productivity"],
     "icons": [
         {
             "src": "/assets/icons/icon-72x72.png",
@@ -61,9 +62,5 @@
             "type": "image/png",
             "form_factor": "narrow"
         }
-    ],
-    "categories": ["business", "productivity"],
-    "edge_side_panel": {
-        "preferred_width": 400
-    }
+    ]
 }
