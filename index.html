@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Avícola</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="shortcut icon" href="assets\icons\ARK.png"> <!--===== Logo en nombre de pagina ===== -->
-
     
     <!-- PWA Meta Tags MEJORADAS -->
     <meta name="theme-color" content="#4a7b5d">
@@ -18,6 +16,10 @@
     <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
     <meta name="msapplication-config" content="/browserconfig.xml">
 
+    <!-- Meta Tags para App Nativa -->
+    <meta name="application-name" content="Sistema Avícola">
+    <meta name="apple-mobile-web-app-title" content="AvicolaApp">
+
     <!-- Icons MEJORADAS -->
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/icon-512x512.png">
@@ -25,7 +27,7 @@
     <link rel="apple-touch-icon" sizes="167x167" href="/assets/icons/icon-167x167.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/icon-152x152.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/icon-120x120.png">
-    
+
     <!-- Splash Screens para iOS -->
     <link rel="apple-touch-startup-image" href="/assets/splash/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
     <link rel="apple-touch-startup-image" href="/assets/splash/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
@@ -44,7 +46,7 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="styles/backup.css">
     <link rel="stylesheet" href="styles/mobile.css">
-
+    
     <style>
         :root {
             --primary: #4a7b5d;
@@ -56,14 +58,14 @@
             --info: #17a2b8;
             --warning: #ffc107;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background-color: #f5f5f5;
             color: var(--dark);
@@ -71,46 +73,46 @@
             display: flex;
             flex-direction: column;
         }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 15px;
         }
-
+        
         header {
             background-color: var(--primary);
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
+        
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-
+        
         .logo i {
             margin-right: 10px;
         }
-
+        
         nav ul {
             display: flex;
             list-style: none;
         }
-
+        
         nav li {
             margin-left: 1.5rem;
         }
-
+        
         nav a {
             color: white;
             text-decoration: none;
@@ -120,15 +122,43 @@
             display: flex;
             align-items: center;
         }
-
+        
         nav a i {
             margin-right: 5px;
         }
-
+        
         nav a:hover, nav a.active {
             background-color: rgba(255,255,255,0.2);
         }
-
+        
+        /* Botones del header */
+        .header-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .btn-install-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .btn-install-header:hover {
+            background: linear-gradient(135deg, #218838, #1ea085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
         .btn-backup-header {
             background-color: var(--info);
             color: white;
@@ -142,41 +172,41 @@
             gap: 0.5rem;
             transition: background-color 0.3s;
         }
-
+        
         .btn-backup-header:hover {
             background-color: #138496;
         }
-
+        
         main {
             flex: 1;
             padding: 2rem 0;
         }
-
+        
         .welcome-section {
             text-align: center;
             padding: 3rem 0;
         }
-
+        
         .welcome-section h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--primary);
         }
-
+        
         .welcome-section p {
             font-size: 1.2rem;
             color: #6c757d;
             max-width: 600px;
             margin: 0 auto 2rem;
         }
-
+        
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
-
+        
         .feature-card {
             background: white;
             border-radius: 8px;
@@ -186,22 +216,22 @@
             transition: transform 0.3s;
             border-top: 4px solid var(--primary);
         }
-
+        
         .feature-card:hover {
             transform: translateY(-5px);
         }
-
+        
         .feature-icon {
             font-size: 3rem;
             color: var(--primary);
             margin-bottom: 1rem;
         }
-
+        
         .feature-card h3 {
             margin-bottom: 1rem;
             color: var(--primary);
         }
-
+        
         .btn {
             display: inline-block;
             background-color: var(--primary);
@@ -215,15 +245,15 @@
             cursor: pointer;
             font-size: 1rem;
         }
-
+        
         .btn:hover {
             background-color: #3a6a4a;
         }
-
+        
         .btn i {
             margin-right: 0.5rem;
         }
-
+        
         footer {
             background-color: var(--dark);
             color: white;
@@ -231,7 +261,7 @@
             padding: 1rem 0;
             margin-top: auto;
         }
-
+        
         /* Estadísticas rápidas */
         .quick-stats {
             display: grid;
@@ -239,7 +269,7 @@
             gap: 1.5rem;
             margin: 2rem 0;
         }
-
+        
         .stat-card {
             background: white;
             padding: 1.5rem;
@@ -248,53 +278,62 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             border-left: 4px solid var(--primary);
         }
-
+        
         .stat-number {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary);
             display: block;
         }
-
+        
         .stat-label {
             color: #666;
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
-
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
             }
-
+            
             nav ul {
                 margin-top: 1rem;
                 justify-content: center;
                 flex-wrap: wrap;
             }
-
+            
             nav li {
                 margin: 0.5rem;
             }
-
-            .btn-backup-header {
-                margin: 1rem 0 0 0;
+            
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
             }
-
+            
+            .btn-install-header,
+            .btn-backup-header {
+                width: 100%;
+                justify-content: center;
+                margin: 0.25rem 0;
+            }
+            
             .welcome-section h1 {
                 font-size: 2rem;
             }
-
+            
             .feature-grid {
                 grid-template-columns: 1fr;
             }
-
+            
             .quick-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
+        
         @media (max-width: 480px) {
             .quick-stats {
                 grid-template-columns: 1fr;
@@ -308,120 +347,7 @@
                 font-size: 1.75rem;
             }
         }
-        /* Banner de instalación mejorado */
-        #installBanner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
-            color: white;
-            padding: 1rem;
-            z-index: 10000;
-            box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
-            animation: slideUp 0.5s ease-out;
-        }
         
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        
-        .install-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .install-text {
-            flex: 1;
-        }
-        
-        .install-text h4 {
-            margin: 0 0 0.25rem 0;
-            font-size: 1.1rem;
-        }
-        
-        .install-text p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .install-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .btn-install {
-            background: white;
-            color: #4a7b5d;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-install:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        .btn-install-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-        
-        /* Botón flotante de instalación */
-        .floating-install-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: #4a7b5d;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 9999;
-            animation: pulse 2s infinite;
-            border: none;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        /* Indicador de app instalada */
-        .app-installed-badge {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: #28a745;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            z-index: 9998;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* Modal de Instalación PWA */
         .install-modal {
             display: none;
@@ -438,48 +364,48 @@
             animation: slideUpInstall 0.5s ease-out;
             border: 2px solid #4a7b5d;
         }
-
+        
         @keyframes slideUpInstall {
-            from { 
+            from {
                 transform: translateX(-50%) translateY(100px);
                 opacity: 0;
             }
-            to { 
+            to {
                 transform: translateX(-50%) translateY(0);
                 opacity: 1;
             }
         }
-
+        
         .install-modal-content {
             padding: 20px;
             text-align: center;
         }
-
+        
         .install-icon {
             font-size: 3rem;
             color: #4a7b5d;
             margin-bottom: 10px;
         }
-
+        
         .install-title {
             font-size: 1.3rem;
             font-weight: 600;
             color: #4a7b5d;
             margin-bottom: 8px;
         }
-
+        
         .install-description {
             color: #666;
             margin-bottom: 20px;
             line-height: 1.4;
         }
-
+        
         .install-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
         }
-
+        
         .btn-install-modal {
             flex: 1;
             padding: 12px 20px;
@@ -490,27 +416,27 @@
             transition: all 0.3s ease;
             font-size: 0.95rem;
         }
-
+        
         .btn-install-primary {
             background: linear-gradient(135deg, #4a7b5d, #3a6a4a);
             color: white;
         }
-
+        
         .btn-install-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(74, 123, 93, 0.4);
         }
-
+        
         .btn-install-secondary {
             background: #f8f9fa;
             color: #666;
             border: 1px solid #ddd;
         }
-
+        
         .btn-install-secondary:hover {
             background: #e9ecef;
         }
-
+        
         .install-benefits {
             background: #f8f9fa;
             padding: 15px;
@@ -518,24 +444,24 @@
             margin-top: 15px;
             text-align: left;
         }
-
+        
         .install-benefits h4 {
             margin: 0 0 8px 0;
             color: #4a7b5d;
             font-size: 0.9rem;
         }
-
+        
         .install-benefits ul {
             margin: 0;
             padding-left: 20px;
             color: #666;
         }
-
+        
         .install-benefits li {
             margin-bottom: 5px;
             font-size: 0.85rem;
         }
-
+        
         /* Overlay para modal */
         .install-overlay {
             display: none;
@@ -547,7 +473,7 @@
             background: rgba(0,0,0,0.5);
             z-index: 9999;
         }
-
+        
         /* Badge cuando está instalada */
         .installed-badge {
             position: fixed;
@@ -561,7 +487,12 @@
             z-index: 10001;
             animation: fadeIn 0.5s ease;
         }
-
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         /* Responsive */
         @media (max-width: 480px) {
             .install-modal {
@@ -574,60 +505,9 @@
             }
             
             .install-benefits {
-                display: none; /* Ocultar beneficios en móvil para ahorrar espacio */
+                display: none;
             }
         }
-
-        /* Botones del header */
-        .header-buttons {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        /* Botón de instalación en header */
-        .btn-install-header {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .btn-install-header:hover {
-            background: linear-gradient(135deg, #218838, #1ea085);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-        }
-
-        .btn-install-header:active {
-            transform: translateY(0);
-        }
-
-        /* Responsive para botones del header */
-        @media (max-width: 768px) {
-            .header-buttons {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 1rem;
-            }
-            
-            .btn-install-header,
-            .btn-backup-header {
-                width: 100%;
-                justify-content: center;
-                margin: 0.25rem 0;
-            }
-        }
-
-
     </style>
 </head>
 <body>
@@ -648,13 +528,17 @@
                     </ul>
                 </nav>
                 
-                <!-- BOTONES DEL HEADER -->
+                <!-- BOTONES DEL HEADER - CORREGIDO -->
                 <div class="header-buttons">
-                    <!-- Botón de Instalación -->
+                    <!-- Botón de Instalación - VISIBLE POR DEFECTO -->
                     <button class="btn-install-header" id="headerInstallBtn">
-                        <i class="fas fa-download"></i> Instalar App
+                        <i class="fas fa-mobile-alt"></i> Instalar App
                     </button>
                     
+                    <!-- Botón de Backup (existente) -->
+                    <button class="btn-backup-header" onclick="abrirBackupAvicola()">
+                        <i class="fas fa-database"></i> Backup
+                    </button>
                 </div>
             </div>
         </div>
@@ -665,7 +549,7 @@
             <section class="welcome-section">
                 <h1>Bienvenido al Sistema de Gestión Avícola</h1>
                 <p>Gestiona de manera eficiente tu granja avícola con nuestro sistema integral de control de producción, ventas, inventario y finanzas.</p>
-
+                
                 <!-- Estadísticas Rápidas -->
                 <div class="quick-stats" id="quickStats">
                     <div class="stat-card">
@@ -685,7 +569,7 @@
                         <span class="stat-label">Clientes</span>
                     </div>
                 </div>
-
+                
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
@@ -697,7 +581,6 @@
                             <i class="fas fa-money-bill-wave"></i> Ir a Transacciones
                         </a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-egg"></i>
@@ -708,7 +591,6 @@
                             <i class="fas fa-egg"></i> Ir a Producción
                         </a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-shopping-cart"></i>
@@ -719,7 +601,6 @@
                             <i class="fas fa-users"></i> Ir a Compradores
                         </a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-boxes"></i>
@@ -730,7 +611,6 @@
                             <i class="fas fa-boxes"></i> Ir a Inventario
                         </a>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-database"></i>
@@ -741,7 +621,6 @@
                             <i class="fas fa-database"></i> Gestionar Backup
                         </button>
                     </div>
-
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-chart-line"></i>
@@ -787,7 +666,7 @@
                         <i class="fas fa-shield-alt"></i> Verificar Integridad
                     </button>
                 </div>
-
+                
                 <!-- Exportación -->
                 <div class="backup-card">
                     <h3><i class="fas fa-file-export"></i> Exportar Datos</h3>
@@ -808,7 +687,7 @@
                         <i class="fas fa-download"></i> Descargar Backup Completo
                     </button>
                 </div>
-
+                
                 <!-- Importación -->
                 <div class="backup-card">
                     <h3><i class="fas fa-file-import"></i> Importar Datos</h3>
@@ -821,7 +700,7 @@
                             Se creará un backup automático antes de la importación.
                         </div>
                     </div>
-
+                    
                     <div class="file-input-container">
                         <input type="file" id="archivoBackup" accept=".json" style="display: none;">
                         <button onclick="document.getElementById('archivoBackup').click()" class="btn-backup btn-backup-warning">
@@ -834,7 +713,7 @@
                         <i class="fas fa-file-import"></i> Importar Datos
                     </button>
                 </div>
-
+                
                 <!-- Herramientas Adicionales -->
                 <div class="backup-card">
                     <h3><i class="fas fa-tools"></i> Herramientas</h3>
@@ -850,29 +729,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Banner de instalación (se muestra automáticamente) -->
-    <div id="installBanner" style="display: none;">
-        <div class="install-content">
-            <div class="install-text">
-                <h4>📱 Instalar App Avícola</h4>
-                <p>Obtén la experiencia completa: funciona offline, más rápido y como app nativa</p>
-            </div>
-            <div class="install-buttons">
-                <button class="btn-install" onclick="mobileApp.installApp()">
-                    <i class="fas fa-download"></i> Instalar App
-                </button>
-                <button class="btn-install btn-install-secondary" onclick="mobileApp.hideInstallPrompt()">
-                    Ahora No
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Botón flotante de instalación -->
-    <button class="floating-install-btn" id="floatingInstallBtn" style="display: none;" onclick="mobileApp.installApp()">
-        <i class="fas fa-download"></i>
-    </button>
 
     <!-- Overlay para modal de instalación -->
     <div class="install-overlay" id="installOverlay"></div>
@@ -960,13 +816,38 @@
 
         let deferredPrompt = null;
         let isAppInstalled = false;
+        let isOnline = navigator.onLine;
 
-        // Mostrar/ocultar botón de instalación en header
+        // Mostrar/ocultar botón de instalación en header - MEJORADA
         function toggleInstallButton(show) {
             const installBtn = document.getElementById('headerInstallBtn');
             if (installBtn) {
-                installBtn.style.display = show ? 'flex' : 'none';
-                console.log(`📱 Botón instalación: ${show ? 'VISIBLE' : 'OCULTO'}`);
+                if (show === false) {
+                    installBtn.style.display = 'none';
+                    console.log('📱 Botón instalación: OCULTO');
+                } else {
+                    installBtn.style.display = 'flex';
+                    console.log('📱 Botón instalación: VISIBLE');
+                }
+            }
+        }
+
+        // Función para mostrar/ocultar indicador offline
+        function toggleOfflineIndicator(show) {
+            let indicator = document.getElementById('offlineIndicator');
+            
+            if (!indicator && show) {
+                // Crear indicador offline
+                indicator = document.createElement('div');
+                indicator.id = 'offlineIndicator';
+                indicator.innerHTML = `
+                    <div style="position: fixed; top: 0; left: 0; right: 0; background: #dc3545; color: white; padding: 10px; text-align: center; z-index: 10000; font-size: 14px;">
+                        <i class="fas fa-wifi-slash"></i> Modo Offline - Los datos se guardarán localmente
+                    </div>
+                `;
+                document.body.appendChild(indicator);
+            } else if (indicator && !show) {
+                indicator.remove();
             }
         }
 
@@ -1059,36 +940,114 @@
         async function installFromHeader() {
             if (!deferredPrompt) {
                 console.log('❌ No hay prompt disponible, mostrando instrucciones manuales');
-                showManualInstructions();
+                showAppInstallInstructions();
                 return;
             }
 
             try {
-                console.log('🔄 Iniciando instalación desde header...');
+                console.log('📥 Iniciando instalación como App Nativa...');
                 
-                // Mostrar el prompt de instalación nativo
+                // Mostrar feedback visual
+                showInstallationFeedback();
+                
+                // Disparar el prompt de instalación
                 deferredPrompt.prompt();
                 
-                // Esperar a que el usuario responda
+                // Esperar la decisión del usuario
                 const { outcome } = await deferredPrompt.userChoice;
-                console.log(`✅ Usuario ${outcome} la instalación`);
                 
                 if (outcome === 'accepted') {
-                    console.log('🎉 Usuario aceptó la instalación');
+                    console.log('🎉 App instalada como aplicación nativa');
                     isAppInstalled = true;
-                    showInstalledBadge();
+                    showAppInstalledMessage();
                     toggleInstallButton(false);
+                    
+                    // Analytics o tracking de instalación
+                    trackAppInstallation();
                 } else {
-                    console.log('❌ Usuario rechazó la instalación');
+                    console.log('❌ Usuario rechazó instalación como App');
+                    showAlternativeInstallOptions();
                 }
                 
-                // Limpiar la referencia
                 deferredPrompt = null;
                 
             } catch (error) {
-                console.error('💥 Error durante la instalación:', error);
-                showManualInstructions();
+                console.error('💥 Error en instalación:', error);
+                showAppInstallInstructions();
             }
+        }
+
+        // Mostrar instrucciones específicas para instalación como App
+        function showAppInstallInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            const isChrome = /Chrome/.test(navigator.userAgent);
+
+            let instructions = '';
+
+            if (isIOS) {
+                instructions = `
+📱 PARA INSTALAR COMO APP EN iOS:
+
+1. Toca el botón COMPARTIR 📤 
+2. Desplaza hacia ABAJO en el menú
+3. Selecciona "AGREGAR A PANTALLA DE INICIO" 
+4. Toca "AGREGAR" en la esquina superior derecha
+
+✅ La app aparecerá en tu pantalla de inicio como una aplicación nativa.
+                `;
+            } else if (isAndroid && isChrome) {
+                instructions = `
+📱 PARA INSTALAR COMO APP EN ANDROID:
+
+1. Toca el menú (⋮) en Chrome 
+2. Selecciona "INSTALAR APLICACIÓN"
+3. Confirma la instalación
+
+✅ La app se instalará como una aplicación nativa en tu dispositivo.
+                `;
+            } else {
+                instructions = `
+💻 PARA INSTALAR COMO APP EN COMPUTADORA:
+
+1. Haz clic en el ícono de "INSTALAR" en la barra de direcciones
+2. Confirma la instalación cuando el navegador lo solicite
+
+✅ La app se instalará como una aplicación independiente.
+                `;
+            }
+
+            // Mostrar en modal elegante
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 100%; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">📱</div>
+                    <h3 style="margin: 0 0 20px 0; color: #4a7b5d;">Instalar como Aplicación</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: left; font-size: 14px; line-height: 1.6; white-space: pre-line; margin-bottom: 20px;">
+                        ${instructions}
+                    </div>
+                    <button onclick="this.closest('.app-install-modal').remove()" style="background: #4a7b5d; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                        Entendido
+                    </button>
+                </div>
+            `;
+            
+            modal.className = 'app-install-modal';
+            document.body.appendChild(modal);
         }
 
         // Mostrar instrucciones manuales
@@ -1098,24 +1057,24 @@
 
             if (state.isIOS) {
                 instructions = `
-        Para instalar en iPhone/iPad:
-        1. Toca el botón COMPARTIR 📤 (barra inferior)
-        2. Desplaza hacia abajo
-        3. Selecciona "AGREGAR A PANTALLA DE INICIO"
-        4. Toca "AGREGAR" en la esquina superior derecha
+Para instalar en iPhone/iPad:
+1. Toca el botón COMPARTIR 📤 (barra inferior)
+2. Desplaza hacia abajo
+3. Selecciona "AGREGAR A PANTALLA DE INICIO"
+4. Toca "AGREGAR" en la esquina superior derecha
                 `;
             } else if (state.isAndroid) {
                 instructions = `
-        Para instalar en Android:
-        1. Toca el menú (⋮) en Chrome
-        2. Selecciona "AGREGAR A LA PANTALLA DE INICIO"
-        3. Confirma tocando "AGREGAR"
+Para instalar en Android:
+1. Toca el menú (⋮) en Chrome
+2. Selecciona "AGREGAR A LA PANTALLA DE INICIO"
+3. Confirma tocando "AGREGAR"
                 `;
             } else {
                 instructions = `
-        Para instalar en Computadora:
-        1. Haz clic en "INSTALAR" en la barra de direcciones
-        2. O ve a Configuración → Más herramientas → Crear acceso directo
+Para instalar en Computadora:
+1. Haz clic en "INSTALAR" en la barra de direcciones
+2. O ve a Configuración → Más herramientas → Crear acceso directo
                 `;
             }
 
@@ -1136,7 +1095,7 @@
             `;
             
             modal.innerHTML = `
-                <div style="background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 100%;">
+                <div style="background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <h3 style="margin: 0; color: #4a7b5d;">📱 Instrucciones de Instalación</h3>
                         <button onclick="this.closest('.install-instructions').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">×</button>
@@ -1154,6 +1113,37 @@
             document.body.appendChild(modal);
         }
 
+        // Feedback durante la instalación
+        function showInstallationFeedback() {
+            // Puedes agregar un loader o mensaje de "Instalando..."
+            console.log('🔄 Mostrando feedback de instalación...');
+        }
+
+        // Mensaje cuando se instala correctamente
+        function showAppInstalledMessage() {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('✅ App Instalada', {
+                    body: 'Sistema Avícola se ha instalado como aplicación nativa.',
+                    icon: '/assets/icons/icon-192x192.png'
+                });
+            }
+            
+            // Mostrar badge visual
+            showInstalledBadge();
+        }
+
+        // Track de instalación (opcional)
+        function trackAppInstallation() {
+            // Aquí puedes agregar analytics
+            console.log('📊 Tracking de instalación de app');
+            localStorage.setItem('appInstalled', new Date().toISOString());
+        }
+
+        function showAlternativeInstallOptions() {
+            // Opciones alternativas si el usuario rechaza
+            console.log('ℹ️ Mostrando opciones alternativas de instalación');
+        }
+
         // Mostrar badge cuando está instalada
         function showInstalledBadge() {
             const badge = document.getElementById('installedBadge');
@@ -1165,38 +1155,113 @@
             }
         }
 
-        // Verificar si ya está instalada
+        // Verificar si ya está instalada - MEJORADA
         function checkIfInstalled() {
+            let installed = false;
+
+            // Método 1: Display mode standalone
             if (window.matchMedia('(display-mode: standalone)').matches) {
                 console.log('✅ App ya está instalada (modo standalone)');
-                isAppInstalled = true;
-                showInstalledBadge();
-                toggleInstallButton(false);
-                return true;
+                installed = true;
             }
 
-            // Verificar otros métodos
+            // Método 2: Navigator standalone (iOS)
             if (window.navigator.standalone) {
                 console.log('✅ App ya está instalada (navigator.standalone)');
+                installed = true;
+            }
+
+            // Método 3: Verificar en localStorage
+            if (localStorage.getItem('appInstalled')) {
+                console.log('✅ App marcada como instalada en localStorage');
+                installed = true;
+            }
+
+            if (installed) {
                 isAppInstalled = true;
                 showInstalledBadge();
                 toggleInstallButton(false);
-                return true;
+            } else {
+                console.log('❌ App no está instalada');
+                toggleInstallButton(true); // Mostrar botón si no está instalada
             }
 
-            console.log('❌ App no está instalada');
-            return false;
+            return installed;
         }
 
-        // Registrar Service Worker
+        // Configurar detectores de conexión
+        function setupConnectionDetectors() {
+            // Cuando se pierde conexión
+            window.addEventListener('offline', () => {
+                console.log('🌐 Conexión perdida - Modo offline activado');
+                isOnline = false;
+                toggleOfflineIndicator(true);
+                
+                // Mostrar notificación
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Sistema Avícola - Modo Offline', {
+                        body: 'Puedes seguir trabajando. Los datos se guardarán localmente.',
+                        icon: '/assets/icons/icon-192x192.png'
+                    });
+                }
+            });
+            
+            // Cuando se recupera conexión
+            window.addEventListener('online', () => {
+                console.log('✅ Conexión recuperada');
+                isOnline = true;
+                toggleOfflineIndicator(false);
+                updateLastSync();
+                
+                // Sincronizar datos pendientes si es necesario
+                syncPendingData();
+            });
+            
+            // Estado inicial
+            if (!isOnline) {
+                toggleOfflineIndicator(true);
+            }
+        }
+
+        // Función para guardar timestamp de última sincronización
+        function updateLastSync() {
+            localStorage.setItem('lastSync', new Date().toISOString());
+            console.log('✅ Última sincronización actualizada');
+        }
+
+        // Función para sincronizar datos pendientes (puedes expandirla)
+        function syncPendingData() {
+            console.log('🔄 Sincronizando datos pendientes...');
+            // Aquí puedes agregar lógica para sincronizar datos
+            // con un servidor cuando se recupere la conexión
+            
+            // Por ahora, simplemente actualizamos el timestamp
+            updateLastSync();
+        }
+
+        // Registrar Service Worker con manejo de errores mejorado
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js')
                     .then(function(registration) {
                         console.log('✅ ServiceWorker registrado:', registration.scope);
+                        
+                        // Verificar si hay una nueva versión
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('🔄 Nueva versión del Service Worker encontrada');
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('🆕 Nueva versión disponible. Recarga para actualizar.');
+                                    // Puedes mostrar un banner al usuario para recargar
+                                }
+                            });
+                        });
                     })
                     .catch(function(error) {
                         console.log('❌ Error ServiceWorker:', error);
+                        // El sistema seguirá funcionando sin Service Worker
                     });
             } else {
                 console.log('❌ Service Worker no soportado');
@@ -1216,24 +1281,34 @@
             // 2. Service Worker - IMPORTANTE: Registrar primero
             registerServiceWorker();
 
-            // 3. Verificar si ya está instalada
-            checkIfInstalled();
+            // 3. Detección de conexión
+            setupConnectionDetectors();
 
-            // 4. Configurar eventos de instalación PWA
+            // 4. Verificar si ya está instalada
+            const alreadyInstalled = checkIfInstalled();
+            
+            // 5. MOSTRAR BOTÓN DE INSTALACIÓN POR DEFECTO (a menos que ya esté instalada)
+            if (!alreadyInstalled) {
+                toggleInstallButton(true);
+            }
+
+            // 6. Configurar eventos de instalación PWA
             window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('🎯 ¡beforeinstallprompt event fired!');
+                console.log('🎯 Evento de instalación como App disparado!');
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // MOSTRAR BOTÓN EN HEADER inmediatamente
-                toggleInstallButton(true);
-                
-                // MOSTRAR MODAL automáticamente después de 5 segundos
+                // Asegurar que el botón esté visible
                 if (!isAppInstalled) {
-                    console.log('📱 Mostrando modal en 5 segundos...');
+                    toggleInstallButton(true);
+                }
+                
+                // MOSTRAR MODAL automáticamente después de 3 segundos
+                if (!isAppInstalled) {
+                    console.log('📱 Mostrando modal en 3 segundos...');
                     setTimeout(() => {
                         showInstallModal();
-                    }, 5000);
+                    }, 3000);
                 }
             });
 
@@ -1246,14 +1321,14 @@
                 closeInstallModal();
             });
 
-            // 5. Configurar botón de instalación del header
+            // 7. Configurar botón de instalación del header
             const headerInstallBtn = document.getElementById('headerInstallBtn');
             if (headerInstallBtn) {
                 headerInstallBtn.addEventListener('click', installFromHeader);
                 console.log('✅ Botón de instalación configurado');
             }
 
-            // 6. Mensaje de bienvenida
+            // 8. Mensaje de bienvenida
             const primeraVisita = !localStorage.getItem('transactions') && 
                                 !localStorage.getItem('productionData');
 
@@ -1291,11 +1366,12 @@
         window.showPWAStatus = function() {
             const state = checkPWARequirements();
             const status = `Estado PWA:
-        ✅ Service Worker: ${state.serviceWorker}
-        ✅ Prompt Disponible: ${deferredPrompt ? 'SÍ' : 'NO'}  
-        ✅ App Instalada: ${isAppInstalled}
-        📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}
-        🖥️ User Agent: ${navigator.userAgent}`;
+✅ Service Worker: ${state.serviceWorker}
+✅ Prompt Disponible: ${deferredPrompt ? 'SÍ' : 'NO'}  
+✅ App Instalada: ${isAppInstalled}
+🌐 Conexión: ${isOnline ? 'ONLINE' : 'OFFLINE'}
+📱 Dispositivo: ${state.isIOS ? 'iOS' : state.isAndroid ? 'Android' : 'Desktop'}
+🖥️ User Agent: ${navigator.userAgent}`;
             console.log('📊 Estado PWA:', status);
             alert(status);
         };
@@ -1320,14 +1396,36 @@
             };
             window.dispatchEvent(event);
         };
+
+        // Hacer funciones globales
+        window.installFromHeader = installFromHeader;
+        window.installPWA = installPWA;
+        window.closeInstallModal = closeInstallModal;
+    </script>
+
+    <!-- Script para verificar botones al cargar -->
+    <script>
+        // Verificar que los botones estén correctamente configurados al cargar
+        window.addEventListener('load', function() {
+            const installBtn = document.getElementById('headerInstallBtn');
+            const backupBtn = document.querySelector('.btn-backup-header');
+            
+            if (installBtn && backupBtn) {
+                console.log('🔧 Verificación de botones:');
+                console.log('- Botón Instalación:', installBtn.style.display);
+                console.log('- Botón Backup:', backupBtn.style.display);
+                
+                // Asegurar que ambos botones sean visibles
+                if (installBtn.style.display === 'none') {
+                    console.log('⚠️ Botón instalación estaba oculto, mostrando...');
+                    installBtn.style.display = 'flex';
+                }
+            }
+        });
     </script>
 
     <!-- Scripts externos -->
     <script src="js/exportador.js"></script>
     <script src="js/main.js"></script>
-
-
-
-
 </body>
 </html>

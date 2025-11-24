@@ -1,96 +1,65 @@
-// Service Worker CORREGIDO - Rutas actualizadas
-const CACHE_NAME = 'avicola-app-v3.0.1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/transacciones.html',
-  '/produccion.html', 
-  '/inventario.html',
-  '/compradores.html',
-  '/manifest.json',
-  '/assets/icons/icon-192x192.png',
-  '/assets/icons/icon-512x512.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-];
+;
+//asignar un nombre y versión al cache
+const CACHE_NAME = 'WebDeveloper',
+  urlsToCache = [
+    './',
+    './index.html',
+    './css/bootstrap.min.css',
+    './css/home.css',
 
-// Instalar
-self.addEventListener('install', (event) => {
-  console.log('🚀 Service Worker: Instalando...');
-  event.waitUntil(
+    './js/bootstrap.bundle.min.js',
+    './js/jquery-3.6.0.js',
+
+    './regist_serviceWorker.js',
+    './pwa/images/icons/icon-512x512.png',
+    './pwa/images/icons/icon-72x72.png'
+  ]
+
+//durante la fase de instalación, generalmente se almacena en caché los activos estáticos
+self.addEventListener('install', e => {
+  e.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('✅ Service Worker: Cache abierto');
-        return cache.addAll(urlsToCache);
+      .then(cache => {
+        return cache.addAll(urlsToCache)
+          .then(() => self.skipWaiting())
       })
-      .then(() => {
-        console.log('✅ Service Worker: Todos los recursos cacheados');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('❌ Service Worker: Error cacheando:', error);
-      })
-  );
-});
+      .catch(err => console.log('Falló registro de cache', err))
+  )
+})
 
-// Activar
-self.addEventListener('activate', (event) => {
-  console.log('🎉 Service Worker: Activado');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Service Worker: Eliminando cache viejo:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
-});
+//una vez que se instala el SW, se activa y busca los recursos para hacer que funcione sin conexión
+self.addEventListener('activate', e => {
+  const cacheWhitelist = [CACHE_NAME]
 
-// Fetch
-self.addEventListener('fetch', (event) => {
-  // No cachear requests de analytics o APIs externas
-  if (event.request.url.includes('google-analytics') ||
-      event.request.url.includes('api.')) {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Devuelve el recurso cacheado si existe
-        if (response) {
-          return response;
-        }
-        
-        // Clona el request
-        const fetchRequest = event.request.clone();
-        return fetch(fetchRequest)
-          .then((response) => {
-            // Verifica si la respuesta es válida
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
+  e.waitUntil(
+    caches.keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            //Eliminamos lo que ya no se necesita en cache
+            if (cacheWhitelist.indexOf(cacheName) === -1) {
+              return caches.delete(cacheName)
             }
-
-            // Clona la respuesta
-            const responseToCache = response.clone();
-            
-            // Cachea el nuevo recurso
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
           })
-          .catch(() => {
-            // Fallback para páginas
-            if (event.request.destination === 'document') {
-              return caches.match('/index.html');
-            }
-          });
+        )
       })
-  );
-});
+      // Le indica al SW activar el cache actual
+      .then(() => self.clients.claim())
+  )
+})
+
+//cuando el navegador recupera una url
+self.addEventListener('fetch', e => {
+  //Responder ya sea con el objeto en caché o continuar y buscar la url real
+  e.respondWith(
+    caches.match(e.request)
+      .then(res => {
+        if (res) {
+          //recuperar del cache
+          return res
+        }
+        //recuperar de la petición a la url
+        return fetch(e.request)
+      })
+  )
+})
